@@ -1,0 +1,71 @@
+.block {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.copyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 36px;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--surface);
+  color: var(--foreground);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.4rem 0.65rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.copyButton:hover {
+  border-color: var(--control-border-hover);
+  background: var(--hover);
+}
+
+.copyButton:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 3px;
+}
+
+.pre {
+  margin: 0;
+  padding: 1.25rem 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--foreground);
+}
+
+.status:not(:empty) {
+  padding: 0.75rem 1rem 0;
+  font-size: 0.75rem;
+}
+
+.copyButton:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}

@@ -1,0 +1,89 @@
+.panel {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  font-size: 0.8rem;
+}
+
+.panel h3 {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.panel fieldset {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  margin-top: 1rem;
+  border: 0;
+}
+
+.panel label {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.panel label span {
+  color: var(--muted);
+}
+
+.panel input:not([type="checkbox"]),
+.panel select {
+  min-width: 0;
+  width: 100%;
+  min-height: 36px;
+  padding: 0.5rem;
+  border: 1px solid var(--control-border);
+  border-radius: 4px;
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+}
+
+.panel .consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.consent input {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.panel button {
+  justify-self: start;
+  min-height: 36px;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.panel button:hover {
+  background: var(--hover);
+}
+
+.panel :disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.panel [role="alert"] {
+  margin-top: 1rem;
+}
+
+.receipt {
+  display: grid;
+  gap: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.receipt a {
+  text-decoration: underline;
+}

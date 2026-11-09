@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Validate gallery",
+			"type": "shell",
+			"command": "npm run lint && npm run typecheck && npm test && npm run validate:submissions && npm run build",
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		}
+	]
+}

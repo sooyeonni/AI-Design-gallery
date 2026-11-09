@@ -1,0 +1,223 @@
+.card {
+  min-width: 0;
+}
+
+.projectLink {
+  display: block;
+  border-radius: 6px;
+}
+
+.preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  padding: 1rem;
+  border-radius: 6px;
+  background: #e9e7ef;
+  color: #303030;
+  box-shadow: 0 1px 3px #00000012;
+}
+
+.previewTitle {
+  z-index: 1;
+  max-width: 95%;
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.previewLabel {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.4rem;
+  z-index: 1;
+  padding: 0.15rem 0.35rem;
+  border-radius: 2px;
+  background: #ffffffde;
+  color: #454545;
+  font-size: 0.5rem;
+}
+
+.shapeOne,
+.shapeTwo {
+  position: absolute;
+  z-index: -1;
+}
+
+.preview[data-category="Prototype"] {
+  background: #f0eff3;
+}
+
+.preview[data-category="Prototype"] .shapeOne {
+  width: 85%;
+  height: 130%;
+  right: -15%;
+  bottom: -65%;
+  border-radius: 50%;
+  background: conic-gradient(#be83ce, #90d4df, #ebc298, #be83ce);
+  filter: blur(15px);
+}
+
+.preview[data-category="Slides"] {
+  background: #e2d6a9;
+}
+
+.preview[data-category="Slides"] .shapeOne {
+  width: 45%;
+  aspect-ratio: 1;
+  bottom: -40%;
+  left: 5%;
+  border-radius: 50%;
+  background: #f2e9c9;
+  box-shadow: 3rem -1rem 0 #cdbd88;
+}
+
+.preview[data-category="Experiment"] {
+  background: #f3c387;
+}
+
+.preview[data-category="Experiment"] .shapeOne {
+  width: 120%;
+  height: 140%;
+  left: -60%;
+  top: -65%;
+  border: 1rem solid #b6662e;
+  border-radius: 50%;
+}
+
+.preview[data-category="Experiment"] .shapeTwo {
+  width: 75%;
+  aspect-ratio: 1;
+  right: -40%;
+  bottom: -100%;
+  border: 1px solid #a86535;
+  border-radius: 50%;
+  box-shadow: 0 0 0 12px #f3c387, 0 0 0 13px #a86535;
+}
+
+.preview[data-category="Tool"] {
+  background: #282a27;
+  color: #f4f0df;
+}
+
+.preview[data-category="Tool"] .shapeOne {
+  width: 40%;
+  height: 140%;
+  right: -20%;
+  bottom: -80%;
+  border-radius: 50%;
+  background: #a9bc72;
+  transform: rotate(30deg);
+}
+
+.preview[data-category="Other"] {
+  background: #d5ddd0;
+}
+
+.preview[data-category="Other"] .shapeOne {
+  width: 48%;
+  height: 130%;
+  left: -15%;
+  bottom: -65%;
+  border-radius: 50% 50% 0 0;
+  background: #a8baa2;
+  transform: rotate(25deg);
+}
+
+.preview[data-category="Other"] .shapeTwo {
+  width: 25%;
+  aspect-ratio: 1;
+  right: 8%;
+  top: -15%;
+  border-radius: 50%;
+  background: #ece7c6;
+}
+
+.title {
+  margin-top: 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.pending {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+.projectLink:hover .title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.author {
+  font-size: 0.65rem;
+  line-height: 1.5;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem;
+  margin-top: 0.3rem;
+  font-size: 0.6rem;
+  color: var(--muted);
+}
+
+.card[data-view="list"] {
+  --thumbnail-width: 8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.card[data-view="list"] .projectLink {
+  display: grid;
+  grid-template-columns: var(--thumbnail-width) minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.card[data-view="list"] .preview {
+  padding: 0.5rem;
+}
+
+.card[data-view="list"] .previewTitle {
+  font-size: 0.75rem;
+}
+
+.card[data-view="list"] .title {
+  margin-top: 0;
+  font-size: 0.9rem;
+}
+
+.card[data-view="list"] .pending {
+  grid-column: 2;
+}
+
+.card[data-view="list"] .author,
+.card[data-view="list"] .details {
+  margin-left: calc(var(--thumbnail-width) + 1rem);
+}
+
+.card[data-view="list"] .author {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .card[data-view="list"] {
+    --thumbnail-width: 5rem;
+  }
+}

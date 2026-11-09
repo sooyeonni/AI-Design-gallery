@@ -1,34 +1,33 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --background: #fafafa;
+  --surface: #ffffff;
+  --foreground: #303030;
+  --muted: #686868;
+  --line: #e4e4e4;
+  --hover: #f2f2f2;
+  --selected: #ededed;
+  --button-background: #e9e9e9;
+  --button-hover: #dedede;
+  --control-border: #cecece;
+  --control-border-hover: #c8c8c8;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #171717;
+  --surface: #222222;
+  --foreground: #eeeeee;
+  --muted: #ababab;
+  --line: #393939;
+  --hover: #2b2b2b;
+  --selected: #333333;
+  --button-background: #333333;
+  --button-hover: #404040;
+  --control-border: #505050;
+  --control-border-hover: #686868;
 }
 
 * {
@@ -37,13 +36,68 @@ body {
   margin: 0;
 }
 
+html {
+  height: 100%;
+}
+
+html,
+body {
+  width: 100%;
+}
+
+body {
+  min-height: 100%;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 a {
   color: inherit;
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+button {
+  font-family: inherit;
+  color: inherit;
+}
+
+input {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -5rem;
+  left: 1rem;
+  z-index: 10;
+  padding: 0.75rem 1rem;
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
