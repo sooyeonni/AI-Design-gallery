@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "title": "Blow & Pop",
+    "author": "Blow & Pop",
+    "category": "Experiment",
+    "tools": ["Github Copilot", "MediaPipe", "React", "TypeScript"],
+    "slug": "blow-and-pop",
+    "createdAt": "2026-11-09"
+  }
+]
