@@ -161,7 +161,8 @@ export default function HowToUploadPage() {
               <span className={styles.stepNumber}>05</span>
               <h2 className={styles.stepTitle}>We publish it</h2>
               <p className={styles.stepBody}>Soo checks your PR and merges it. GitHub Pages then
-                publishes your project automatically. No hosting setup needed.</p>
+                captures your opening screen for the gallery thumbnail and publishes your project.
+                No image upload or hosting setup needed.</p>
               <p className={styles.stepBody}>Save your PR link for updates. If changes are requested,
                 share the feedback with your agent. Your project is live once the deployment
                 succeeds and it appears in the gallery.</p>

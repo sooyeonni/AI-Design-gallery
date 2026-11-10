@@ -21,12 +21,12 @@ export interface Project {
    */
   slug: string;
   /**
-   * Publicly accessible deployed URL. Absent until the automated deployment
-   * workflow deploys `projects/<slug>/` and writes the resulting URL back
-   * into this file. Participants and their AI agents must never set this
-   * themselves.
+   * Publicly accessible deployed URL. Resolved automatically for Pages projects;
+   * participants do not need to supply it.
    */
   url?: string;
+  /** Generated screenshot URL, resolved by the gallery rather than participant metadata. */
+  thumbnailUrl?: string;
   /** ISO date string (YYYY-MM-DD) */
   createdAt: string;
   /** Marks example/placeholder data that can be safely removed */

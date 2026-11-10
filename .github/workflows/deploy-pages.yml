@@ -29,12 +29,52 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build:pages
+      - uses: actions/upload-artifact@v4
+        with:
+          name: static-site
+          path: out
+          include-hidden-files: true
+          retention-days: 1
+  capture:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@v4
+        with:
+          name: static-site
+          path: site
+      - name: Build operator-owned screenshot worker
+        run: docker build -t gallery-thumbnails scripts/thumbnail-worker
+      - name: Capture reviewed exports without credentials or network access
+        timeout-minutes: 12
+        run: |
+          mkdir "$RUNNER_TEMP/thumbnails"
+          chmod 777 "$RUNNER_TEMP/thumbnails"
+          docker run --rm --init \
+            --network none --read-only --cap-drop ALL \
+            --security-opt no-new-privileges \
+            --pids-limit 256 --memory 2g --cpus 2 --shm-size 256m \
+            --tmpfs /tmp:rw,noexec,nosuid,size=512m \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/site,dst=/source,readonly" \
+            --mount "type=bind,src=$RUNNER_TEMP/thumbnails,dst=/output" \
+            gallery-thumbnails
+      - name: Validate and install generated thumbnails
+        run: node scripts/finish-thumbnails.mjs site "$RUNNER_TEMP/thumbnails"
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: out
+          path: site
           retention-days: 1
   deploy:
-    needs: build
+    needs: capture
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

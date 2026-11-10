@@ -32,6 +32,10 @@
   overflow-wrap: anywhere;
 }
 
+.thumbnail {
+  object-fit: cover;
+}
+
 .previewLabel {
   position: absolute;
   right: 0.5rem;

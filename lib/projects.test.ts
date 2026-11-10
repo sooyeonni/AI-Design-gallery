@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { getProjects, parseProjects } from "./projects.ts";
+import { getProjects, parseProjects, resolveProjectUrls } from "./projects.ts";
 import { formatDate } from "./dates.ts";
 import { CATEGORIES } from "./types.ts";
 
@@ -21,6 +21,34 @@ test("repository data parses and sorts newest first", () => {
     projects.map((entry) => entry.createdAt),
     projects.map((entry) => entry.createdAt).sort().reverse(),
   );
+  for (const project of projects) {
+    const base = "https://sooyeonni.github.io/AI-Design-gallery";
+    if (!project.sample && project.url === `${base}/projects/${project.slug}/`) {
+      assert.equal(project.thumbnailUrl, `${base}/thumbnails/${project.slug}.png`);
+    } else {
+      assert.equal(project.thumbnailUrl, undefined);
+    }
+  }
+});
+
+test("participant metadata cannot override generated thumbnails", () => {
+  assert.equal(parseProjects([{ ...project, thumbnailUrl: "https://example.com/fake.png" }])[0].thumbnailUrl, undefined);
+});
+
+test("merged gallery metadata resolves thumbnails after parsing; external and sample entries are unchanged", () => {
+  const { url: externalUrl, ...local } = project;
+  const base = "https://sooyeonni.github.io/AI-Design-gallery";
+  for (const metadata of [local, { ...local, url: `${base}/projects/test-project/` }]) {
+    const parsed = parseProjects([metadata]);
+    const [resolved] = resolveProjectUrls(parsed);
+    assert.equal(resolved.url, `${base}/projects/test-project/`);
+    assert.equal(resolved.thumbnailUrl, `${base}/thumbnails/test-project.png`);
+    assert.equal(parsed[0].thumbnailUrl, undefined);
+  }
+  for (const metadata of [{ ...local, sample: true }, { ...local, url: externalUrl }]) {
+    const parsed = parseProjects([metadata]);
+    assert.deepEqual(resolveProjectUrls(parsed), parsed);
+  }
 });
 
 test("Slides leads the supported categories and Website is no longer accepted", () => {

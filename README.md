@@ -26,8 +26,9 @@ GitHub Actions and GitHub Pages.
    ```
 
 5. Leave out `url` and `sample`. Push a branch to your fork and open a PR to `main`.
-6. File checks run; Soo reviews and merges. GitHub Actions then automatically
-   publishes the gallery and approved files. A failed deployment leaves the old site live.
+6. File checks run; Soo reviews and merges. GitHub Actions captures your opening
+   screen and publishes the gallery and approved files. No thumbnail upload is
+   needed. A failed capture or deployment leaves the old site live.
 
 Your AI coding agent can help: copy the prompt on **How to Upload** or use
 [AGENTS.md](./AGENTS.md). Confirm before it pushes or opens a PR.
@@ -97,6 +98,28 @@ permission and no deployment secrets. A separate deploy job receives only Pages/
 permissions and deploys the artifact. Submitted build scripts are never executed.
 PR validation has no secrets; first-time contributors may need workflow approval.
 Protect `main` and review infrastructure changes before merging.
+
+Between build and deploy, a separate read-only capture job renders reviewed static
+exports in a non-root Playwright Docker container. The container has no credentials,
+Docker socket, host network, or external network access; exports are mounted read-only.
+Capabilities are dropped, privilege escalation is disabled, and CPU, memory, process,
+temporary storage and workflow runtime are limited. Chromium's internal sandbox is
+disabled inside this restricted container; do not treat Docker as a safety certification
+or use this workflow for arbitrary unreviewed submissions.
+Each project gets a fresh browser context with service workers/downloads blocked.
+Only the project's own files are served, under the exact Pages subfolder.
+Opening screens are captured at 1280 × 720 after fonts load and a short render delay,
+without clicking, signing in, or granting camera/microphone permissions.
+External requests are blocked, so assets must be local. JavaScript errors or capture
+failures stop publication, with details in Actions. This is a thumbnail check, not a
+functional or security review. Existing externally hosted URLs are not captured.
+
+The worker's Playwright package and container image versions must match; its npm
+lockfile lives in `scripts/thumbnail-worker/`. Generated PNGs are checked for a
+regular file, size, format and dimensions before being added to the Pages artifact.
+They are not committed to Git. `build:pages` alone produces a capture manifest,
+not screenshots; automatic capture runs only on GitHub after merge or manual dispatch.
+Do not run the screenshot worker with unfamiliar submissions on a company computer.
 
 The workflow uses one-day Pages artifacts, no Actions cache, no paid runners,
 and no external AI or Vercel deployment service. Free services have quotas:

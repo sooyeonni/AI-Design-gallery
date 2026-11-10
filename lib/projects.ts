@@ -72,10 +72,20 @@ export function parseProjects(data: unknown): Project[] {
 }
 
 export function getProjects(): Project[] {
-  return parseProjects(projectsData).map((project) => ({
-    ...project,
-    ...(!project.sample && !project.url ? {
-      url: `https://sooyeonni.github.io/AI-Design-gallery/projects/${project.slug}/`,
-    } : {}),
-  }));
+  return resolveProjectUrls(parseProjects(projectsData));
+}
+
+export function resolveProjectUrls(projects: Project[]): Project[] {
+  return projects.map((project) => {
+    const base = "https://sooyeonni.github.io/AI-Design-gallery";
+    const pagesUrl = `${base}/projects/${project.slug}/`;
+    const isPagesProject = !project.sample && (!project.url || project.url === pagesUrl);
+    return {
+      ...project,
+      ...(isPagesProject ? {
+        url: pagesUrl,
+        thumbnailUrl: `${base}/thumbnails/${project.slug}.png`,
+      } : {}),
+    };
+  });
 }

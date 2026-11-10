@@ -43,6 +43,7 @@ try {
     await copyPagesProject(project, destination);
   }
   await writeFile(path.join(destination, ".nojekyll"), "");
+  await writeFile(path.join(destination, "_thumbnail-projects.json"), JSON.stringify(validated.map(({ slug }) => slug)));
   await rm(output, { recursive: true, force: true });
   await cp(destination, output, { recursive: true });
   console.log(`Pages export ready: ${validated.length} static projects. No submitted build scripts were executed.`);
