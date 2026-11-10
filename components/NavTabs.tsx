@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ThemeToggle } from "./ThemeProvider";
-import { UploadProjectButton } from "./UploadDialog";
 import styles from "./NavTabs.module.css";
 
 const TABS = [
@@ -29,7 +28,8 @@ export default function NavTabs({ active }: { active: "/" | "/how-to-upload" }) 
         })}
       </ul>
       <div className={styles.actions}>
-      <UploadProjectButton />
+      <a className={styles.upload} href="https://github.com/sooyeonni/AI-Design-gallery/fork"
+        target="_blank" rel="noopener noreferrer">Submit project</a>
       <a
         className={styles.github}
         href="https://github.com/sooyeonni/AI-Design-gallery"

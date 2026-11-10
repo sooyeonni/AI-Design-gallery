@@ -1,247 +1,120 @@
 # AI Design Study — Gallery
 
-A small, polished web gallery showcasing projects built by members of the
-**AI Design Study** using AI tools such as Claude, ChatGPT, Cursor, Figma
-Make, Lovable, v0, and more.
+A gallery of things we make with AI, published with free public-repository
+GitHub Actions and GitHub Pages.
 
-This is a community showcase with a Next.js gallery and a private ZIP
-submission pipeline. Participants do not need GitHub or Vercel accounts.
+**Site:** https://sooyeonni.github.io/AI-Design-gallery/
 
-Visit [AI Design Study](https://ai-design-gallery.vercel.app).
+## Submit a project
 
-## Submit your project
+1. Create a free GitHub account and fork this repository.
+2. Build and locally test your project's static export with its existing workflow.
+3. Add only the exported files to `projects/<slug>/`, including `index.html`.
+   Use relative asset paths so they work under
+   `/AI-Design-gallery/projects/<slug>/`, not just at a domain root.
+4. Add one entry to [projects.json](./projects.json):
 
-1. Open your project in your AI coding tool and copy the packaging prompt from
-   [How to Upload](https://ai-design-gallery.vercel.app/how-to-upload).
-2. Let your agent build, test, and package a self-contained static-site ZIP.
-   It should return the ZIP path, not interview you for submission details.
-   Agent instructions: [`AGENTS.md`](./AGENTS.md).
-3. Click **Upload project** on the website. Enter your title, author name,
-   category, and AI tools, choose the ZIP, and complete the anti-bot check.
-   You upload it yourself; your agent does not submit or deploy it.
-4. Save your private status link for review feedback and deployment updates.
-5. After archive validation, self-hosted AI review, isolated desktop/mobile
-   preview checks, and a verified deployment pass, the project appears in the gallery.
+   ```json
+   {
+     "title": "My project",
+     "author": "Soo",
+     "category": "Prototype",
+     "tools": ["Claude Code"],
+     "slug": "my-project",
+     "createdAt": "2026-11-09"
+   }
+   ```
 
-Automatic publication supports static exports with `index.html` and local assets,
-not arbitrary source builds. Server/API/database projects and uncertain results
-need further review. Missing review or deployment services block publication;
-a successful upload is not an approval.
+5. Leave out `url` and `sample`. Push a branch to your fork and open a PR to `main`.
+6. File checks run; Soo reviews and merges. GitHub Actions then automatically
+   publishes the gallery and approved files. A failed deployment leaves the old site live.
 
-ZIP limits: **25 MiB compressed, 100 MiB expanded, 20 MiB per file, 300 entries**.
-The browser uploads directly to private Blob storage using a short-lived,
-path-scoped token. Server-side archive checks must pass before review is queued.
-Existing installations must apply [the direct-upload migration](./supabase/direct-uploads.sql)
-before deploying this version.
-Never include secrets, private environment files, dependencies, repository metadata,
-or symlinks. You must have permission to publish all included assets.
+Your AI coding agent can help: copy the prompt on **How to Upload** or use
+[AGENTS.md](./AGENTS.md). Confirm before it pushes or opens a PR.
+All submitted files and Git history are public. Do not submit confidential/company
+files or assets without permission. A GitHub account is required; a Vercel account is not.
 
-For service configuration and worker operations, see the
-[submission system guide](./docs/submissions.md).
+Categories: **Slides, Prototype, Experiment, Tool, Other**.
 
-## What this is
+## Supported projects and limits
 
-- A **Gallery** page with a category sidebar, title/author search, and
-  a responsive preview grid grouped by category. A Gallery / List switcher
-  beside search changes the layout without resetting search or filters.
-  Sidebar counts reflect the
-  current search across all categories. Preview artwork is illustrative,
-  generated with CSS rather than screenshots of submitted projects.
-- A **Contributors** section below the gallery categories shows confirmed
-  GitHub names, avatars, and profile links. Profiles are curated in
-  [`GalleryClient.tsx`](./components/GalleryClient.tsx), not inferred from
-  sample authors or fetched from the private repository at runtime.
-- A **How to Upload** page that walks anyone through preparing and submitting
-  a project — including copyable prompts for AI coding agents. It shares the
-  gallery's sidebar layout and compact typography, with links to each step.
-  The sidebar highlights the current step as you scroll.
-- An icon-only **light / dark mode** toggle beside GitHub appears on both
-  pages. The theme stays selected during navigation and resets to light
-  when the page is reloaded. Illustrative preview artwork retains its colors.
-- A shared footer on both pages credits **Made by Soo** and **© 2026 AI Design Study**.
-- All project metadata lives in [`projects.json`](./projects.json), which
-  retains existing/sample and maintainer-managed projects. Published ZIP
-  submissions are read from Supabase alongside that file.
-- Public **ZIP submissions** use private Vercel Blob storage, Supabase,
-  Turnstile, and a separate review worker. Participants never need a PR.
-  Setup and operational details: [submission system](./docs/submissions.md).
-- Existing web projects under [`projects/`](./projects/) retain their
-  reviewed post-merge deployment workflow.
+- Static HTML/CSS/JavaScript with local assets. Local MediaPipe `.wasm`, `.task`,
+  `.tflite`, and `.bin` files are supported, but no automated webcam interaction
+  testing is claimed. Test camera features over localhost/HTTPS yourself.
+- **100 MiB per project, 20 MiB per file, 300 files/directories.**
+- No server functions, databases, secret API keys, build configuration, hidden files,
+  dependencies, symlinks, or ZIP uploads. Export locally; CI does not build submissions.
+- Keep all projects together under 750 MiB to leave room for the gallery.
+- Existing reviewed entries with explicit HTTPS `url` values retain those URLs.
+  Existing sample entries remain labeled; new PRs must not add sample flags.
 
-The gallery is a Next.js app with server-side intake/status APIs. Submission
-builds never execute in its web server. ZIP publication is fail-closed when
-review infrastructure is not configured.
+This is a **trusted study-member showcase**, not an arbitrary untrusted app host.
+Projects share the `sooyeonni.github.io` origin with the gallery and any other
+Pages projects on that account. They are not isolated by subfolder.
+Review scripts, service workers, and external data requests before merging.
+Do not host logins or sensitive transactions. CI checks reduce risk but do not
+certify safety, asset permissions, or functional correctness.
 
-## Tech stack
+## Development
 
-- [Next.js](https://nextjs.org/) (App Router) + React + TypeScript
-- CSS Modules / global CSS (no Tailwind)
-- [Framer Motion](https://www.framer.com/motion/) for subtle animation
-- Ready to deploy on [Vercel](https://vercel.com/)
-- GitHub Actions + Vercel CLI for post-merge project deployment
-
-## Running locally
-
-Use Node.js 24 LTS and npm. The gallery reads published submissions at request
-time; search, filters, and clipboard interactions run in the browser.
-With no submission environment configured, existing projects still display,
-while uploads are visibly unavailable.
+Node.js 24 and npm:
 
 ```bash
 npm ci
 npm run dev
+npm run lint
+npm run typecheck
+npm test
+npm run validate:submissions
+npm run build:pages
 ```
 
-Then open [http://localhost:3000](http://localhost:3000).
+`build:pages` produces `out/` with repository-prefixed gallery assets and
+`projects/<slug>/` static exports. It builds in a temporary directory, excludes
+legacy API/status routes, copies only validated static project files, and cleans
+the temporary build. It never copies private environment files into the export.
+No submission services or credentials are required.
 
-Other useful scripts:
+To preview the exact Pages paths, serve the repository root with a local static
+server or mount `out/` at `/AI-Design-gallery/`. Do not execute submitted scripts
+on a company computer. Maintainers should inspect code and use a separately
+isolated environment for interactive review of unfamiliar projects.
 
-```bash
-npm run build   # production build
-npm run start   # run the production build locally
-npm run lint    # ESLint
-npm run typecheck # generated route types + TypeScript
-npm test        # metadata, archive, review, and database tests
-npm run validate:submissions # metadata and project-folder safety checks
-```
+## GitHub Pages setup
 
-## Deploying to Vercel
+1. Keep this repository **public**.
+2. In **Settings → Pages**, select **GitHub Actions** as the source.
+3. Merge to `main`, or run **Publish gallery to GitHub Pages** from Actions.
+4. Check the workflow's deployment URL. No custom domain or paid server is required.
 
-1. Push this repository to GitHub under `sooyeonni`. Keep it private.
-2. Go to [vercel.com/new](https://vercel.com/new) and import the
-   repository.
-3. Grant the Vercel GitHub integration access to this private repository.
-   Use the default Next.js build settings, Node.js 24, and `main` as the
-   production branch. No environment variables are required for browsing
-   existing projects; ZIP intake requires the configuration documented
-   in [submission setup](./docs/submissions.md).
-4. Deploy. Every merge to the default branch automatically redeploys the
-   gallery.
+The workflow builds on a standard `ubuntu-latest` runner with read-only repository
+permission and no deployment secrets. A separate deploy job receives only Pages/OIDC
+permissions and deploys the artifact. Submitted build scripts are never executed.
+PR validation has no secrets; first-time contributors may need workflow approval.
+Protect `main` and review infrastructure changes before merging.
 
-### Configure legacy project deployment
+The workflow uses one-day Pages artifacts, no Actions cache, no paid runners,
+and no external AI or Vercel deployment service. Free services have quotas:
+Pages sites are at most 1 GB with a 100 GB/month soft bandwidth limit.
+Repository history and artifacts also consume storage. Stay within GitHub's
+terms; do not enable paid features or assume unlimited capacity.
 
-The gallery deployment and submitted-project deployment are separate:
+Official limits: [Pages](https://docs.github.com/pages/getting-started-with-github-pages/github-pages-limits)
+and [Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
 
-1. Create a Vercel access token for the account or team that will own the
-   study projects.
-2. In GitHub, open **Settings → Secrets and variables → Actions** and add the
-   token as the repository secret `VERCEL_TOKEN`.
-3. If deploying to a Vercel team, add its team slug as the repository
-   variable `VERCEL_SCOPE`. Leave it unset for a personal Vercel account.
-4. Ensure GitHub Actions is allowed to write repository contents. If `main`
-   has branch protection, allow the `github-actions[bot]` writeback or use a
-   ruleset exception for the `Deploy submitted projects` workflow.
+## Previous ZIP/Vercel system
 
-The workflow only receives the token on a `push` to `main` after review and
-merge. Pull Request workflows never receive it and never execute participant
-project build scripts.
+New ZIP intake is closed (POST returns 410). Existing private submissions, Blob
+files and Supabase records are **not deleted or published** by this migration.
+Existing private receipts remain on the old Vercel site's `/submission-status`
+and its API; they do not move to Pages. The old Vercel application can still be
+built with `npm run build`, but is not required for new Pages submissions.
+Historical operational details: [ZIP system](./docs/submissions.md).
 
-## Legacy maintainer-managed projects
+The former Vercel project-deployment workflow is replaced by Pages. Legacy scripts
+are retained but do not run automatically. Do not run them for new submissions.
+No Vercel/Supabase/Blob services, keys, or billing settings are removed automatically:
+only disconnect/delete them after separately confirming retention and old receipts.
 
-Existing repository-managed projects have:
-
-- deployable source code in `projects/<slug>/`
-- one matching metadata object in [`projects.json`](./projects.json)
-
-```json
-{
-  "title": "AI Travel Planner",
-  "author": "Soo",
-  "category": "Prototype",
-  "tools": ["Claude Code", "Figma Make"],
-  "slug": "ai-travel-planner",
-  "createdAt": "2026-09-23"
-}
-```
-
-- `slug` matches the project folder exactly and uniquely.
-- `createdAt` (ISO `YYYY-MM-DD`) is used both to display the date and to
-  sort projects, newest first.
-- `tools` is an array, so a project can list multiple AI tools.
-- `url` is intentionally omitted from a participant's Pull Request. After
-  merge, the deployment workflow adds the HTTPS URL returned by Vercel.
-- Entries marked `"sample": true` are placeholder projects included so the
-  gallery can be visually evaluated during development. Remove them
-  whenever you like once real projects are added. They are visibly labeled
-  **Sample** and link to the reserved `example.com` domain, not real member
-  deployments. Replace the URL and remove the flag for a real submission.
-- Validation checks required fields, category, slug uniqueness, optional
-  HTTPS URLs, real calendar dates, project folders, sensitive files, generated
-  dependencies, and symlinks. Failures identify the entry or path.
-
-## Project requirements
-
-Every ZIP submission must have:
-
-- A **title**
-- An **author**
-- A valid **category** (see below)
-- At least one **AI tool** used
-- A ZIP up to 25 MiB compressed / 100 MiB expanded / 300 entries / 20 MiB per file
-- For automatic publication: `index.html` plus local assets, without source
-  build configuration, server code or external network dependencies
-
-The server generates unique slugs and creation dates. Participants do not
-provide a public URL; the review worker supplies it after a verified deploy.
-Projects must not contain secrets, environment files, dependency folders,
-repository metadata, Vercel state, or symlinks.
-
-## Available categories
-
-- `Slides`
-- `Prototype`
-- `Experiment`
-- `Tool`
-- `Other`
-
-## Contributing
-
-- Project submissions: see "Submit your project" above, or just
-  ask your AI coding agent to read [`AGENTS.md`](./AGENTS.md).
-- Gallery UI/design changes: open a Pull Request with your change. Please
-  avoid introducing Tailwind or unrelated dependencies — keep
-  the architecture simple.
-
-## Validation
-
-Run `npm run lint`, `npm run typecheck`, `npm test`,
-`npm run validate:submissions`, and `npm run build` before sharing changes.
-Then run `npm start` and verify:
-
-- Search matches titles and authors, regardless of capitalization.
-- Slides appears first, followed by Prototype, Experiment, Tool, and Other.
-- Each of the five categories works, including combined search/filter and
-  empty results; clearing filters restores the full collection.
-- Cards within each category are newest first, show all metadata, and open their HTTPS URL in
-  a separate tab with `noopener noreferrer`; projects awaiting deployment
-  show a non-interactive status instead of a broken link.
-- The packaging prompt's copy button copies the exact prompt, shows temporary feedback, and
-  surface a helpful error if clipboard permission is denied.
-- Keyboard focus, reduced motion, and narrow mobile layouts work on both pages.
-
-Clipboard access requires HTTPS or localhost. Submission credentials stay
-server-side. ZIP deployment credentials belong only on the dedicated worker;
-legacy deployment credentials remain protected GitHub Actions secrets.
-Database/state tests use in-memory Postgres through PGlite.
-
-## Legacy automatic deployment behavior
-
-[`deploy-projects.yml`](./.github/workflows/deploy-projects.yml) runs only
-after changes to `projects/` or `projects.json` land on `main`. It:
-
-1. Validates metadata and every real project folder.
-2. Redeploys every real project so the newest merge always covers changes from
-   any queued or closely timed push.
-3. Creates or reuses an isolated Vercel project named
-   `ai-design-study-<slug>`.
-4. deploys the matching folder with the pinned Vercel CLI.
-5. Writes successful HTTPS deployment URLs back to `projects.json`.
-6. Commits and pushes the metadata update as `github-actions[bot]`.
-
-All deployments must succeed before metadata is written. The workflow retries
-its writeback if `main` advances during deployment, rebuilding the metadata
-update on top of the latest commit when needed. This avoids lost updates,
-partially updated data, and broken gallery links. A workflow failure leaves
-pending cards in their safe "Deployment pending" state. The validation
-workflow also rejects participant attempts to add or alter `url` or the
-reserved `sample` flag.
+The gallery retains search, category filters, Gallery/List views, light/dark mode,
+contributor links, and the shared **Made by Soo · © 2026 AI Design Study** footer.

@@ -35,6 +35,9 @@ function uploadError(error: unknown) {
 }
 
 export async function POST(request: Request) {
+  if (process.env.LEGACY_ZIP_INTAKE_ENABLED !== "true") {
+    return Response.json({ error: "ZIP intake is closed. Submit a Pull Request using How to Upload." }, { status: 410, headers });
+  }
   try {
     const site = uploadSite(request);
     if (site instanceof Response) return site;

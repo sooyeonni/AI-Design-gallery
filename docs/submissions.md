@@ -1,5 +1,10 @@
 # ZIP submission system
 
+> Historical/legacy system. New submissions use static-export PRs and GitHub Pages;
+> see [README](../README.md). ZIP intake is closed by default. Existing records,
+> private blobs and Vercel receipt endpoints are retained, not migrated or deleted.
+> The worker below is not required or scheduled for the new Pages workflow.
+
 ## Flow and boundaries
 
 1. Anyone can submit through **How to Upload**, without a GitHub account.

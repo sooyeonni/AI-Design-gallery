@@ -5,8 +5,9 @@ import { connection } from "next/server";
 import { publishedSubmissions } from "@/lib/submission-store";
 
 export default async function Home() {
-  await connection();
-  const published = await publishedSubmissions();
+  const isPages = process.env.GITHUB_PAGES === "true";
+  if (!isPages) await connection();
+  const published = isPages ? [] : await publishedSubmissions();
   const projects = parseProjects([
     ...getProjects(),
     ...published.map((project) => ({

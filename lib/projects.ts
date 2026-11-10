@@ -72,5 +72,10 @@ export function parseProjects(data: unknown): Project[] {
 }
 
 export function getProjects(): Project[] {
-  return parseProjects(projectsData);
+  return parseProjects(projectsData).map((project) => ({
+    ...project,
+    ...(!project.sample && !project.url ? {
+      url: `https://sooyeonni.github.io/AI-Design-gallery/projects/${project.slug}/`,
+    } : {}),
+  }));
 }

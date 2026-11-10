@@ -5,8 +5,8 @@ import { fileURLToPath } from "node:url";
 import { parseProjects } from "../lib/projects.ts";
 import {
   validateParticipantUrls,
-  validateProjectDirectory,
 } from "./deploy-projects.lib.mjs";
+import { validatePagesProject } from "./pages-projects.mjs";
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const projectsRoot = path.join(repositoryRoot, "projects");
@@ -24,7 +24,7 @@ if (process.env.BASE_SHA) {
 }
 
 for (const project of projects.filter((entry) => !entry.sample)) {
-  await validateProjectDirectory(projectsRoot, project.slug);
+  if (!project.url) await validatePagesProject(projectsRoot, project.slug);
 }
 
 console.log(`Validated ${projects.length} metadata entries and ${projects.filter((entry) => !entry.sample).length} submitted project folders.`);
