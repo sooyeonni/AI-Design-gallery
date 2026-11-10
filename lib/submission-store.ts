@@ -26,8 +26,11 @@ export async function database<T>(resource: string, init: RequestInit = {}): Pro
   });
   if (!response.ok) {
     const body = await response.text();
-    if (response.status === 429 || body.includes("submission_rate_limit")) {
-      throw new SubmissionRateLimitError("Submission limit reached. Try again later.");
+    if (body.includes("submission_rate_limit")) {
+      throw new SubmissionRateLimitError("Submission limit reached: up to 3 upload attempts per IP per hour, including failed ZIP checks. Wait until an attempt is over one hour old and try again. If this persists, contact the organizer.");
+    }
+    if (response.status === 429) {
+      throw new SubmissionRateLimitError("Submission storage is temporarily rate-limited. Please try again later.");
     }
     // Keep database internals out of client responses.
     console.error("Submission database request failed", response.status, resource.split("?")[0]);

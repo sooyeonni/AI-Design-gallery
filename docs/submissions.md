@@ -55,6 +55,13 @@ and provide an organizer contact/takedown process before opening public intake.
   projects are held for manual review rather than silently truncating source.
 - Three submissions per IP per hour, 100 submissions globally per day, 500
   unresolved submissions. Reservations are serialized in Postgres.
+  Failed ZIP checks consume an attempt too; retrying immediately can exhaust
+  the hourly quota. Wait until an attempt is more than one hour old rather than
+  disabling quotas or deleting submission history to bypass them.
+- Credential-pattern checks include filenames, never suspected values, in rejection
+  feedback. Provider-token patterns require token boundaries so incidental substrings
+  inside SVG base64 image data do not trigger rejection. This remains a heuristic,
+  not proof that an archive contains no credentials.
 - Every project gets a generated UUID-suffixed slug; submission never overwrites
   another project. Updates/deletion are organizer operations, not public endpoints.
 

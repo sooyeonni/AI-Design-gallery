@@ -2,7 +2,7 @@ import * as yauzl from "yauzl";
 import { crc32 } from "node:zlib";
 import { ARCHIVE_LIMITS, MAX_EXPANDED_BYTES, MAX_FILE_BYTES, MAX_FILES, MAX_ZIP_BYTES, SubmissionInputError } from "./submissions.ts";
 
-const SECRET = /-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----|(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[A-Z0-9]{16}|sk-(?:proj-)?[A-Za-z0-9_-]{20,})|(?:api[_-]?key|secret|password|access[_-]?token)\s*[:=]\s*["'](?!YOUR_|EXAMPLE|REPLACE|<)[^"'\s]{12,}["']/i;
+const SECRET = /-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----|(?<![A-Za-z0-9_])(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[A-Z0-9]{16}|sk-(?:proj-)?[A-Za-z0-9_-]{20,})(?![A-Za-z0-9_])|(?:api[_-]?key|secret|password|access[_-]?token)\s*[:=]\s*["'](?!YOUR_|EXAMPLE|REPLACE|<)[^"'\s]{12,}["']/i;
 const FORBIDDEN = /^(?:node_modules|\.git|\.vercel|\.next|__MACOSX|\.DS_Store|\.npmrc|\.netrc|id_rsa|id_ed25519|\.env(?:\..*)?)$/i;
 
 export function validateArchivePath(name: string) {
@@ -72,7 +72,7 @@ export async function inspectArchive(bytes: Buffer): Promise<Map<string, Buffer>
                 return fail(new SubmissionInputError("ZIP contains a damaged file. Recreate the archive and try again."));
               }
               if (SECRET.test(content.toString("utf8"))) {
-                return fail(new SubmissionInputError("Potential credentials found. Remove secrets before submitting."));
+                return fail(new SubmissionInputError(`Potential credentials found in ${entry.fileName}. Remove secrets before submitting.`));
               }
               files.set(entry.fileName, content);
               zip.readEntry();

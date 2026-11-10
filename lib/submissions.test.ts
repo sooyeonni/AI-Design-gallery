@@ -66,6 +66,34 @@ test("ZIP accepts flat and wrapped static projects", async () => {
   }
 });
 
+test("SVG embedded image data does not turn an interior token-like substring into a credential", async () => {
+  const image = `prefixAKIA${"A".repeat(16)}suffix`;
+  const files = await inspectArchive(zip([
+    { name: "index.html", content: '<img src="favicon.svg">' },
+    { name: "favicon.svg", content: `<svg><image href="data:image/png;base64,${image}" /></svg>` },
+  ]));
+  assert.equal(files.size, 2);
+});
+
+test("standalone credentials are rejected with a filename, never the suspected value", async () => {
+  const credentials = [
+    `AKIA${"A".repeat(16)}`, `ghp_${"a".repeat(30)}`,
+    `github_pat_${"a".repeat(30)}`, `sk-proj-${"a".repeat(30)}`,
+    `password="${"x".repeat(20)}"`, "-----BEGIN PRIVATE KEY-----",
+  ];
+  for (const credential of credentials) {
+    for (const content of [credential, `const value = "${credential}";`]) {
+      await assert.rejects(inspectArchive(zip([
+        { name: "index.html" }, { name: "assets/main.js", content },
+      ])), (error: Error) => {
+        assert.match(error.message, /Potential credentials found in assets\/main.js/);
+        assert.ok(!error.message.includes(credential));
+        return true;
+      });
+    }
+  }
+});
+
 test("ZIP accepts exactly 25 MiB compressed and rejects one byte more", async () => {
   const overhead = zip([{ name: "index.html", stored: true }, { name: "a.bin", stored: true }, { name: "b.bin", stored: true }]).length;
   const content = randomBytes(MAX_ZIP_BYTES - overhead);
