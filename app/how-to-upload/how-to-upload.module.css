@@ -89,72 +89,25 @@
   text-underline-offset: 3px;
 }
 
-.startHere,
-.resourceCard,
-.notice,
-.troubleshooting {
-  padding: 1rem;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--surface);
-  font-size: 0.8rem;
-  line-height: 1.65;
-  overflow-wrap: anywhere;
-}
-
-.startHere {
-  margin-top: 1.25rem;
-}
-
-.startHere > p,
-.resourceCard > p {
-  margin-top: 0.5rem;
-}
-
-.glossary {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem 1rem;
-  margin-top: 1rem;
-}
-
-.glossary dt,
-.troubleshooting dt {
-  font-weight: 600;
-}
-
-.glossary dd {
-  color: var(--muted);
-}
-
 .resourceActions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 0.75rem;
 }
 
 .resourceActions a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 0.4rem 0.75rem;
-  border: 1px solid var(--line);
-  border-radius: 4px;
+  padding: 0.25rem 0;
+  font-size: 0.8rem;
   font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .resourceActions a:hover {
-  background: var(--hover);
-}
-
-.troubleshooting summary {
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.troubleshooting dt {
-  margin-top: 0.75rem;
+  color: var(--muted);
 }
 
 .substeps {
@@ -258,10 +211,6 @@
 }
 
 @media (max-width: 520px) {
-  .glossary {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .examples {
     grid-template-columns: minmax(0, 1fr);
   }
