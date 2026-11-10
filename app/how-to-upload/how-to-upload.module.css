@@ -115,6 +115,26 @@
   color: var(--muted);
 }
 
+.troubleshooting {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  font-size: 0.8rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.troubleshooting summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.troubleshooting dt {
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
 .substeps {
   display: flex;
   flex-direction: column;

@@ -136,6 +136,21 @@ export default function HowToUploadPage() {
               </ol>
               <p className={styles.stepBody}>All submitted files are public. Never include secrets,
                 company files, or work you do not have permission to publish.</p>
+              <details className={styles.troubleshooting}>
+                <summary>Stuck? Common GitHub messages</summary>
+                <dl>
+                  <dt>&ldquo;There isn&rsquo;t anything to compare&rdquo;</dt>
+                  <dd>Check that your agent pushed the files to your fork. Select its project branch, not an unchanged main branch.</dd>
+                  <dt>&ldquo;Permission denied&rdquo;</dt>
+                  <dd>Ask your agent to push to your fork, not Soo&rsquo;s repository. Make sure you are signed in to your own GitHub account.</dd>
+                  <dt>The PR is in my fork, not Soo&rsquo;s repository</dt>
+                  <dd>Open a new PR with base repository set to sooyeonni/AI-Design-gallery and base branch set to main.</dd>
+                  <dt>Files are too large for browser upload</dt>
+                  <dd>Ask your agent to use Git push instead of the web uploader. The gallery limits still apply: 100 MiB per project, 20 MiB per file, 300 files/folders.</dd>
+                  <dt>Checks are waiting or failing</dt>
+                  <dd>First-time checks may need Soo&rsquo;s permission. For a red check, share its error with your agent and push fixes to the same branch.</dd>
+                </dl>
+              </details>
             </li>
             <li id="we-publish-it" className={styles.step}>
               <span className={styles.stepNumber}>05</span>
