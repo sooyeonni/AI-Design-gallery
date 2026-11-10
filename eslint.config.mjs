@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Static submissions are checked by validate:submissions, not source linting.
+    "projects/**",
   ]),
 ]);
 
