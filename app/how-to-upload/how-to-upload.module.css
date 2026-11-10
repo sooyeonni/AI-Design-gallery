@@ -116,7 +116,7 @@
 }
 
 .troubleshooting {
-  padding: 1rem;
+  padding: 0.5rem;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--surface);
@@ -126,8 +126,52 @@
 }
 
 .troubleshooting summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 40px;
+  padding: 0.5rem 0.65rem;
+  border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
+  list-style: none;
+  transition: background 0.15s ease;
+}
+
+.troubleshooting summary::-webkit-details-marker {
+  display: none;
+}
+
+.troubleshooting summary:hover,
+.troubleshooting[open] {
+  background: var(--selected);
+}
+
+.troubleshooting summary:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+}
+
+.troubleshooting summary svg {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: transform 0.15s ease;
+}
+
+.troubleshooting[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.troubleshooting dl {
+  padding: 0 0.65rem 0.65rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .troubleshooting summary,
+  .troubleshooting summary svg {
+    transition: none;
+  }
 }
 
 .troubleshooting dt {

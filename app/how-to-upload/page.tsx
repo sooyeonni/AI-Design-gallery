@@ -137,7 +137,12 @@ export default function HowToUploadPage() {
               <p className={styles.stepBody}>All submitted files are public. Never include secrets,
                 company files, or work you do not have permission to publish.</p>
               <details className={styles.troubleshooting}>
-                <summary>Stuck? Common GitHub messages</summary>
+                <summary>
+                  <span>Stuck? Common GitHub messages</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </summary>
                 <dl>
                   <dt>&ldquo;There isn&rsquo;t anything to compare&rdquo;</dt>
                   <dd>Check that your agent pushed the files to your fork. Select its project branch, not an unchanged main branch.</dd>
