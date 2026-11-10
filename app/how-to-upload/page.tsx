@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import Link from "next/link";
 import NavTabs from "@/components/NavTabs";
 import CopyCodeBlock from "@/components/CopyCodeBlock";
@@ -55,18 +54,6 @@ const STEPS = [
   { id: "we-publish-it", title: "We publish it" },
 ];
 
-function GitHubIllustration({ title, children, caption }: {
-  title: string; children: ReactNode; caption: string;
-}) {
-  return (
-    <figure className={styles.illustration}>
-      <div className={styles.browserBar}><span aria-hidden="true">● ● ●</span> {title}</div>
-      <div className={styles.mockScreen}>{children}</div>
-      <figcaption>{caption} Illustration, not a live GitHub screen; labels may vary slightly.</figcaption>
-    </figure>
-  );
-}
-
 export default function HowToUploadPage() {
   const basePath = process.env.GITHUB_PAGES === "true" ? "/AI-Design-gallery" : "";
   return (
@@ -117,14 +104,6 @@ export default function HowToUploadPage() {
                 <li>On the next screen, set <strong>Owner</strong> to your username. Keep <strong>Repository name</strong> as <strong>AI-Design-gallery</strong> and click <strong>Create fork</strong>.</li>
                 <li>Check the page heading: it should say <strong>your-username / AI-Design-gallery</strong>, with &ldquo;forked from sooyeonni/AI-Design-gallery&rdquo; below. Copy this page&rsquo;s URL for your agent.</li>
               </ol>
-              <GitHubIllustration title="GitHub · create your copy" caption="1. Fork the original. 2. Choose your account. 3. Check that the copy belongs to you.">
-                <div className={styles.mockRow}><span>sooyeonni / <strong>AI-Design-gallery</strong></span><span className={styles.mockButton}>1 · Fork</span></div>
-                <div className={styles.mockDivider} />
-                <div className={styles.mockField}><span>2 · Owner</span><strong>your-username</strong></div>
-                <div className={styles.mockField}><span>Repository name</span><strong>AI-Design-gallery</strong></div>
-                <span className={styles.mockPrimary}>Create fork</span>
-                <p className={styles.mockHint}>3 · Your copy: your-username / AI-Design-gallery</p>
-              </GitHubIllustration>
               <p className={styles.stepBody}>
                 Already have a fork? Open it and use <strong>Sync fork → Update branch</strong> if
                 available before starting. If GitHub reports a conflict, ask your agent for help;
@@ -142,20 +121,29 @@ export default function HowToUploadPage() {
                 Export and test a static site with index.html and local assets. Use relative
                 asset paths: your project will live under a subfolder, not the domain root.
               </p>
+              <div className={styles.examples}>
+                <div>
+                  <h3>Things you can make</h3>
+                  <ul>
+                    <li>Interactive prototype</li>
+                    <li>Website</li>
+                    <li>Slide deck</li>
+                    <li>Small app</li>
+                    <li>Design experiment</li>
+                    <li>AI workflow demo</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3>Tools you can use</h3>
+                  <p>Claude, ChatGPT, Cursor, Codex, GitHub Copilot, Figma Make,
+                    Lovable, v0, or another AI tool.</p>
+                </div>
+              </div>
               <p className={styles.stepBody}>
                 A <strong>static export</strong> is the finished website, not the editable source
                 project. Ask your coding agent to prepare it in the next step. A <strong>slug</strong> is
                 a short URL-friendly folder name, such as <code className={styles.inlineCode}>blow-and-pop</code>.
               </p>
-              <GitHubIllustration title="Files your agent prepares" caption="Only the finished website and one project entry go into your fork.">
-                <pre className={styles.fileTree}>{`AI-Design-gallery/
-├── projects/
-│   └── blow-and-pop/
-│       ├── index.html
-│       └── assets/
-│           └── ...local files
-└── projects.json  ← add your project info`}</pre>
-              </GitHubIllustration>
               <p className={styles.stepBody}>
                 Up to 100 MiB per project, 20 MiB per file, and 300 files/directories.
                 Local MediaPipe WASM and model files are supported; test camera features
@@ -212,16 +200,6 @@ export default function HowToUploadPage() {
                 <li>Click <strong>Create pull request</strong>. Add a title such as &ldquo;Add Blow &amp; Pop&rdquo;, complete the checklist, and click <strong>Create pull request</strong> again to submit.</li>
                 <li>Save the PR link. You are done when the PR is <strong>Open</strong> in Soo&rsquo;s repository. You do not need to merge it or set up hosting.</li>
               </ol>
-              <GitHubIllustration title="GitHub · compare changes" caption="The arrow points from your branch to Soo’s main branch. Check both sides before submitting.">
-                <div className={styles.compareGrid}>
-                  <div className={styles.mockField}><span>Destination · base</span><strong>sooyeonni/AI-Design-gallery</strong><span>main</span></div>
-                  <span className={styles.compareArrow} aria-label="receives changes from">←</span>
-                  <div className={styles.mockField}><span>Your copy · head</span><strong>your-username/AI-Design-gallery</strong><span>add-blow-and-pop</span></div>
-                </div>
-                <div className={styles.mockDivider} />
-                <p>Files changed: your project folder + projects.json</p>
-                <span className={styles.mockPrimary}>Create pull request</span>
-              </GitHubIllustration>
               <p className={styles.stepBody}>
                 Only change your project folder and metadata entry. Check the PR for secrets
                 before sharing it. New contributors may need Soo to allow the validation
