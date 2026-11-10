@@ -6,5 +6,17 @@
     "tools": ["Github Copilot", "MediaPipe", "React", "TypeScript"],
     "slug": "blow-and-pop",
     "createdAt": "2026-11-09"
+  },
+  {
+    "title": "Headless Design Study",
+    "author": "Tae Lim",
+    "category": "Slides",
+    "tools": [
+      "ChatGPT",
+      "Codex",
+      "Claude Code"
+    ],
+    "slug": "headless-design-study",
+    "createdAt": "2026-11-10"
   }
 ]
