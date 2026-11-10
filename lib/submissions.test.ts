@@ -1,24 +1,26 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { randomBytes } from "node:crypto";
 import { deflateRawSync, crc32 } from "node:zlib";
 import { inspectArchive, staticSiteIssue, validateArchivePath } from "./submission-archive.ts";
-import { MAX_ZIP_BYTES, parseSubmissionMetadata, publicSubmission, submissionSlug } from "./submissions.ts";
+import { MAX_EXPANDED_BYTES, MAX_FILE_BYTES, MAX_ZIP_BYTES, parseSubmissionMetadata, publicSubmission, submissionSlug } from "./submissions.ts";
+import { boundedBytes, clientUploadOptions, parseUploadReceipt, parseUploadRequest, uploadJson, UPLOAD_WINDOW_MS } from "./submission-upload.ts";
 import { deploymentUrl, localReviewUrl, parseReviewDecision, reviewAndPublish, reviewFiles } from "./submission-review.ts";
 import type { Submission } from "./submissions.ts";
 
 // Small, real ZIP fixtures without invoking a shell or a participant build.
-function zip(entries: { name: string; content?: string; mode?: number; size?: number }[]) {
+function zip(entries: { name: string; content?: string | Buffer; mode?: number; size?: number; stored?: boolean }[]) {
   const local: Buffer[] = [];
   const central: Buffer[] = [];
   let offset = 0;
   for (const entry of entries) {
     const name = Buffer.from(entry.name);
     const content = Buffer.from(entry.content || "");
-    const compressed = deflateRawSync(content);
+    const compressed = entry.stored ? content : deflateRawSync(content);
     const header = Buffer.alloc(30);
     header.writeUInt32LE(0x04034b50);
     header.writeUInt16LE(20, 4);
-    header.writeUInt16LE(8, 8);
+    header.writeUInt16LE(entry.stored ? 0 : 8, 8);
     header.writeUInt32LE(crc32(content), 14);
     header.writeUInt32LE(compressed.length, 18);
     header.writeUInt32LE(entry.size ?? content.length, 22);
@@ -62,6 +64,78 @@ test("ZIP accepts flat and wrapped static projects", async () => {
     assert.equal(files.get("index.html")?.toString(), "<h1>Hello</h1>");
     assert.equal(staticSiteIssue(files), null);
   }
+});
+
+test("ZIP accepts exactly 25 MiB compressed and rejects one byte more", async () => {
+  const overhead = zip([{ name: "index.html", stored: true }, { name: "a.bin", stored: true }, { name: "b.bin", stored: true }]).length;
+  const content = randomBytes(MAX_ZIP_BYTES - overhead);
+  const archive = zip([
+    { name: "index.html", stored: true },
+    { name: "a.bin", content: content.subarray(0, 13 * 1024 * 1024), stored: true },
+    { name: "b.bin", content: content.subarray(13 * 1024 * 1024), stored: true },
+  ]);
+  assert.equal(archive.length, 25 * 1024 * 1024);
+  assert.equal((await inspectArchive(archive)).size, 3);
+  await assert.rejects(inspectArchive(Buffer.concat([archive, Buffer.alloc(1)])), /25 MiB/);
+});
+
+test("ZIP accepts 100 MiB expanded and 20 MiB per file, rejects either overflow", async () => {
+  const entries = [
+    { name: "index.html", content: "" },
+    ...Array.from({ length: 5 }, (_, i) => ({ name: `asset-${i}.bin`, content: Buffer.alloc(MAX_FILE_BYTES) })),
+  ];
+  assert.equal(MAX_EXPANDED_BYTES, 100 * 1024 * 1024);
+  const files = await inspectArchive(zip(entries));
+  assert.equal([...files.values()].reduce((total, file) => total + file.length, 0), MAX_EXPANDED_BYTES);
+  await assert.rejects(inspectArchive(zip([...entries, { name: "extra.txt", content: "x" }])), /archive limits/);
+  await assert.rejects(inspectArchive(zip([{ name: "index.html", size: MAX_FILE_BYTES + 1 }])), /archive limits/);
+});
+
+test("MediaPipe-sized assets pass intake but unsupported models and WASM remain held", async () => {
+  const files = await inspectArchive(zip([
+    { name: "index.html", content: "<h1>Camera app</h1>" },
+    { name: "mediapipe/models/hand_landmarker.task", content: Buffer.alloc(Math.ceil(12.89 * 1024 * 1024)) },
+    { name: "mediapipe/vision.wasm", content: "wasm" },
+  ]));
+  assert.match(staticSiteIssue(files)!, /manual review/);
+});
+
+test("direct upload validates declared sizes, metadata, consent, anti-bot token and receipt", () => {
+  const data = {
+    title: "Test", author: "Soo", category: "Tool", tools: ["Claude"],
+    consent: "yes", challenge: "challenge", filename: "project.zip", size: MAX_ZIP_BYTES,
+  };
+  assert.equal(parseUploadRequest(data).size, MAX_ZIP_BYTES);
+  for (const invalid of [
+    { size: MAX_ZIP_BYTES + 1 }, { size: 0 }, { size: -1 }, { size: 1.5 }, { size: "1" },
+    { filename: "project.html" }, { consent: "no" }, { challenge: "" }, { category: "invalid" },
+  ]) assert.throws(() => parseUploadRequest({ ...data, ...invalid }));
+  const receipt = { id: "550e8400-e29b-41d4-a716-446655440000", token: "a".repeat(64) };
+  assert.deepEqual(parseUploadReceipt(receipt), receipt);
+  for (const invalid of [{ ...receipt, id: "id&status=eq.published" }, { ...receipt, token: "" }]) {
+    assert.throws(() => parseUploadReceipt(invalid));
+  }
+  assert.deepEqual(clientUploadOptions(`submissions/${receipt.id}/project.zip`, data.size, 1000), {
+    pathname: `submissions/${receipt.id}/project.zip`, maximumSizeInBytes: MAX_ZIP_BYTES,
+    allowedContentTypes: ["application/zip"], validUntil: 1000 + UPLOAD_WINDOW_MS,
+    addRandomSuffix: false, allowOverwrite: false,
+  });
+});
+
+test("direct upload bounds streamed JSON and Blob downloads without trusting content-length", async () => {
+  const stream = (chunks: Uint8Array[]) => new ReadableStream<Uint8Array>({
+    start(controller) { for (const chunk of chunks) controller.enqueue(chunk); controller.close(); },
+  });
+  assert.equal((await boundedBytes(stream([Buffer.alloc(10), Buffer.alloc(10)]), 20)).length, 20);
+  await assert.rejects(boundedBytes(stream([Buffer.alloc(10), Buffer.alloc(11)]), 20), /size/);
+  const request = (body: string, type = "application/json") => new Request("https://gallery.example/api/submissions", {
+    method: "POST", headers: { "Content-Type": type, "Content-Length": "1" }, body,
+  });
+  assert.deepEqual(await uploadJson(request('{"title":"Test"}')), { title: "Test" });
+  for (const body of ["null", "[]", "{", " ".repeat(16 * 1024 + 1)]) {
+    await assert.rejects(uploadJson(request(body)));
+  }
+  await assert.rejects(uploadJson(request("{}", "text/plain")));
 });
 
 test("ZIP rejects traversal, symlinks, secrets, generated files and duplicates", async () => {

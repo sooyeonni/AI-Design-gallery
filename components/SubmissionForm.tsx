@@ -1,9 +1,10 @@
 "use client";
 
 import Script from "next/script";
+import { put } from "@vercel/blob/client";
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIES } from "@/lib/types";
-import { MAX_ZIP_BYTES, SUBMISSION_STATES } from "@/lib/submissions";
+import { ARCHIVE_LIMITS, MAX_ZIP_BYTES, SUBMISSION_STATES } from "@/lib/submissions";
 import type { SubmissionState } from "@/lib/submissions";
 import styles from "./SubmissionForm.module.css";
 
@@ -19,12 +20,15 @@ declare global {
 }
 
 const LABELS: Record<SubmissionState, string> = {
+  uploading: "Uploading ZIP",
   queued: "Waiting for review", reviewing: "Reviewing", needs_review: "Needs review",
   rejected: "Changes needed", failed: "Processing failed", published: "Published",
 };
 
 export default function SubmissionForm({ enabled, siteKey }: { enabled: boolean; siteKey: string }) {
   const [pending, setPending] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
+  const [uploaded, setUploaded] = useState<Receipt | null>(null);
   const [error, setError] = useState("");
   const [challenge, setChallenge] = useState("");
   const [scriptReady, setScriptReady] = useState(false);
@@ -60,7 +64,7 @@ export default function SubmissionForm({ enabled, siteKey }: { enabled: boolean;
         if (!SUBMISSION_STATES.includes(data.status)) throw new Error("Unexpected submission status.");
         setStatus(data);
         setError("");
-        if (data.status === "queued" || data.status === "reviewing") {
+        if (data.status === "uploading" || data.status === "queued" || data.status === "reviewing") {
           timer = setTimeout(refresh, 10000);
         }
       } catch (error) {
@@ -77,23 +81,57 @@ export default function SubmissionForm({ enabled, siteKey }: { enabled: boolean;
     setError("");
     const form = new FormData(event.currentTarget);
     const file = form.get("archive");
-    if (!(file instanceof File) || !file.size || file.size > MAX_ZIP_BYTES) {
-      setError("Choose a non-empty ZIP, up to 3 MiB.");
-      return;
+    if (!uploaded) {
+      if (!(file instanceof File) || !file.name.toLowerCase().endsWith(".zip") || !file.size || file.size > MAX_ZIP_BYTES) {
+        setError("Choose a non-empty ZIP, up to 25 MiB.");
+        return;
+      }
+      if (!challenge) { setError("Complete the anti-bot check first."); return; }
     }
-    if (!challenge) { setError("Complete the anti-bot check first."); return; }
-    form.set("challenge", challenge);
     setPending(true);
     try {
-      const response = await fetch("/api/submissions", { method: "POST", body: form });
+      let uploadReceipt = uploaded;
+      if (!uploadReceipt && file instanceof File) {
+        setUploadMessage("Preparing upload…");
+        const authorization = await fetch("/api/submissions", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: form.get("title"), author: form.get("author"), category: form.get("category"),
+            tools: String(form.get("tools") || "").split(",").map((tool) => tool.trim()),
+            consent: form.get("consent"), challenge, filename: file.name, size: file.size,
+          }),
+        });
+        const grant = await authorization.json();
+        if (!authorization.ok) throw new Error(grant.error || "Upload could not be authorized.");
+        if (typeof grant.id !== "string" || typeof grant.token !== "string" ||
+            typeof grant.pathname !== "string" || typeof grant.clientToken !== "string") {
+          throw new Error("Invalid upload authorization.");
+        }
+        await put(grant.pathname, file, {
+          access: "private", token: grant.clientToken, contentType: "application/zip",
+          onUploadProgress: ({ percentage }) => setUploadMessage(`Uploading… ${Math.round(percentage)}%`),
+        });
+        uploadReceipt = { id: grant.id, token: grant.token };
+        setUploaded(uploadReceipt);
+      }
+      if (!uploadReceipt) throw new Error("Upload receipt is missing.");
+      setUploadMessage("Checking ZIP…");
+      const response = await fetch("/api/submissions", {
+        method: "PUT", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(uploadReceipt),
+      });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Upload failed.");
+      if (!response.ok) {
+        if (response.status >= 400 && response.status < 500) setUploaded(null);
+        throw new Error(data.error || "Upload failed.");
+      }
       if (typeof data.id !== "string" || typeof data.token !== "string") throw new Error("Invalid submission receipt.");
       setReceipt({ id: data.id, token: data.token });
     } catch (error) {
       setError(error instanceof Error ? error.message : "Upload failed. Try again later.");
     } finally {
       setPending(false);
+      setUploadMessage("");
       setChallenge("");
       if (widget.current) window.turnstile?.reset(widget.current);
     }
@@ -114,14 +152,14 @@ export default function SubmissionForm({ enabled, siteKey }: { enabled: boolean;
       ) : (
         <form onSubmit={submit}>
           <fieldset disabled={!enabled || pending}>
-            <label>Project title<input name="title" required maxLength={100} autoComplete="off" /></label>
-            <label>Author name<input name="author" required maxLength={80} autoComplete="name" /></label>
-            <label>Category<select name="category" required>{CATEGORIES.map((category) => <option key={category}>{category}</option>)}</select></label>
-            <label>AI tools<input name="tools" required maxLength={609} placeholder="Claude Code, Figma Make" /><span>Separate tool names with commas.</span></label>
-            <label>Project ZIP<input name="archive" type="file" accept=".zip,application/zip" required /><span>Up to 3 MiB compressed, 20 MiB expanded. Never include secrets.</span></label>
-            <label className={styles.consent}><input type="checkbox" name="consent" value="yes" required />I own or have permission to publish this project. It contains no secrets, and I agree to automated review and public deployment of the accepted static site.</label>
+            <label>Project title<input name="title" required maxLength={100} autoComplete="off" disabled={!!uploaded} /></label>
+            <label>Author name<input name="author" required maxLength={80} autoComplete="name" disabled={!!uploaded} /></label>
+            <label>Category<select name="category" required disabled={!!uploaded}>{CATEGORIES.map((category) => <option key={category}>{category}</option>)}</select></label>
+            <label>AI tools<input name="tools" required maxLength={609} placeholder="Claude Code, Figma Make" disabled={!!uploaded} /><span>Separate tool names with commas.</span></label>
+            <label>Project ZIP<input name="archive" type="file" accept=".zip,application/zip" required disabled={!!uploaded} /><span>Up to {ARCHIVE_LIMITS}. Never include secrets.</span></label>
+            <label className={styles.consent}><input type="checkbox" name="consent" value="yes" required disabled={!!uploaded} />I own or have permission to publish this project. It contains no secrets, and I agree to automated review and public deployment of the accepted static site.</label>
             {enabled && <div ref={challengeElement} />}
-            <button type="submit" disabled={!challenge || pending}>{pending ? "Uploading…" : "Upload project"}</button>
+            <button type="submit" disabled={(!challenge && !uploaded) || pending}>{pending ? uploadMessage || "Uploading…" : uploaded ? "Retry ZIP checks" : "Upload project"}</button>
           </fieldset>
         </form>
       )}

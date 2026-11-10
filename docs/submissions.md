@@ -11,10 +11,17 @@
    page. Escape or the close button dismisses it; reopening retains the form
    and receipt during the current page session.
 2. A server-side endpoint verifies same-origin submission, permission to publish,
-   Turnstile, metadata and archive safety. The web server never executes ZIP content.
-3. The ZIP is written to a **private** Vercel Blob store. Supabase records its
-   checksum, metadata, hashed status credential, hashed client IP and queue status.
-   Unregistered uploads are removed if database insertion fails.
+   Turnstile and metadata. It reserves Supabase quota in the `uploading` state
+   before issuing a 30-minute, exact-path Blob client token constrained to the
+   declared ZIP size (at most 25 MiB), ZIP content type, and no overwrites.
+3. The browser sends the ZIP directly to a **private** Vercel Blob store, avoiding
+   the Vercel Function request-body limit. It then completes the upload with its
+   private receipt. The server downloads only the reserved path, bounds the download,
+   validates the archive, and atomically records its SHA-256 checksum and queues it.
+   The worker cannot claim unfinished uploads. Completion is idempotent and can
+   be retried without uploading the ZIP again. Invalid archives are rejected and
+   deleted; transient completion failures leave them private for retry.
+   The web server never executes ZIP content.
 4. A separately hosted worker claims one submission using a renewable-by-retry
    15-minute lease. No AI endpoint / sandbox / deployment configuration means
    `needs_review`, not approval. Run the command repeatedly with a supervisor or
@@ -40,7 +47,7 @@ and provide an organizer contact/takedown process before opening public intake.
 
 ## Limits
 
-- 3 MiB compressed; 20 MiB expanded; 5 MiB per file; 300 ZIP entries.
+- 25 MiB compressed; 100 MiB expanded; 20 MiB per file; 300 ZIP entries.
 - UTF-8 filenames; no traversal, ambiguous paths, symlinks, special files,
   encrypted archives, duplicate/case-colliding paths, dependencies, repository
   metadata, environment secrets or common credential patterns.
@@ -57,7 +64,10 @@ Do not paste any credentials into chat or commit them. Set environment variables
 through Vercel's project settings or a gitignored local environment file.
 
 1. Create a Supabase project. Apply [submissions.sql](../supabase/submissions.sql)
-   once through its SQL editor. Tables have RLS enabled and no anonymous/client
+   once through its SQL editor, then apply
+   [direct-uploads.sql](../supabase/direct-uploads.sql). For an existing installation,
+   run only the re-runnable direct-upload migration **before deploying the new code**;
+   do not rerun table creation. Tables have RLS enabled and no anonymous/client
    privileges. All data operations use server-only service-role credentials.
 2. Create and connect a **private** Vercel Blob store to the gallery. Never use
    a public store for original ZIPs.
@@ -166,7 +176,7 @@ snippets, private tokens, internal prompts or credentials.
 
 ## Status, retry, retention, and takedown
 
-Upload returns a UUID and a 32-byte random bearer credential. Only its SHA-256
+Upload authorization returns a UUID and a 32-byte random bearer credential. Only its SHA-256
 hash is stored. The form presents a private status link whose credential is in
 the URL **fragment**, not a query string. Save it before leaving the page.
 Status lookup requires the bearer credential and never returns archive paths,
@@ -175,7 +185,7 @@ IP hashes, review credentials or worker leases.
 States:
 
 ```text
-queued -> reviewing -> published
+uploading -> queued -> reviewing -> published
                     -> needs_review
                     -> rejected
                     -> failed
@@ -204,6 +214,19 @@ and a scheduled storage/database cleanup appropriate for your policies. There is
 no automatic retention job configured in this repository. Failed cleanup is
 logged, never silently ignored. Deleting a database row alone does not delete its
 Blob or Vercel deployment.
+
+Uploads expire after 30 minutes. On the next upload reservation, `uploading` rows
+older than one hour become `failed` so abandoned uploads do not permanently occupy
+the 500 unresolved slots. Failed attempts still count against hourly/daily quotas.
+Clean up their private Blob paths as part of the retention job, even if a browser
+closed before completion or token generation failed. Wait at least one hour after
+reservation before deleting abandoned blobs so expired tokens cannot recreate them.
+Direct uploads do not require a Blob callback URL or webhook secret.
+
+Larger intake limits do not broaden automatic publication support: MediaPipe
+`.task` models, WebAssembly (`.wasm`), and other unsupported binaries remain held
+for manual review. Text-review limits and offline preview restrictions still apply;
+camera interaction is not verified by the sandbox.
 
 If publication succeeds but database completion fails (e.g. expired lease), a
 Vercel deployment may exist without a gallery card. Reconcile such orphan

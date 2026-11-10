@@ -1,6 +1,6 @@
 import * as yauzl from "yauzl";
 import { crc32 } from "node:zlib";
-import { MAX_EXPANDED_BYTES, MAX_FILES, MAX_ZIP_BYTES, SubmissionInputError } from "./submissions.ts";
+import { ARCHIVE_LIMITS, MAX_EXPANDED_BYTES, MAX_FILE_BYTES, MAX_FILES, MAX_ZIP_BYTES, SubmissionInputError } from "./submissions.ts";
 
 const SECRET = /-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----|(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[A-Z0-9]{16}|sk-(?:proj-)?[A-Za-z0-9_-]{20,})|(?:api[_-]?key|secret|password|access[_-]?token)\s*[:=]\s*["'](?!YOUR_|EXAMPLE|REPLACE|<)[^"'\s]{12,}["']/i;
 const FORBIDDEN = /^(?:node_modules|\.git|\.vercel|\.next|__MACOSX|\.DS_Store|\.npmrc|\.netrc|id_rsa|id_ed25519|\.env(?:\..*)?)$/i;
@@ -18,7 +18,7 @@ export function validateArchivePath(name: string) {
 }
 
 export async function inspectArchive(bytes: Buffer): Promise<Map<string, Buffer>> {
-  if (bytes.length > MAX_ZIP_BYTES) throw new SubmissionInputError("ZIP must be 3 MiB or smaller.");
+  if (bytes.length > MAX_ZIP_BYTES) throw new SubmissionInputError("ZIP must be 25 MiB or smaller.");
   return new Promise((resolve, reject) => {
     yauzl.fromBuffer(bytes, { lazyEntries: true, validateEntrySizes: true, strictFileNames: true }, (error, zip) => {
       if (error || !zip) return reject(new SubmissionInputError("Upload a valid, unencrypted ZIP file."));
@@ -47,8 +47,8 @@ export async function inspectArchive(bytes: Buffer): Promise<Map<string, Buffer>
           }
           if (entry.generalPurposeBitFlag & 1) throw new SubmissionInputError("Encrypted ZIP files are not accepted.");
           total += entry.uncompressedSize;
-          if (total > MAX_EXPANDED_BYTES || entry.uncompressedSize > 5 * 1024 * 1024) {
-            throw new SubmissionInputError("ZIP expands beyond the 20 MiB total / 5 MiB per-file limit.");
+          if (total > MAX_EXPANDED_BYTES || entry.uncompressedSize > MAX_FILE_BYTES) {
+            throw new SubmissionInputError(`ZIP exceeds the archive limits: ${ARCHIVE_LIMITS}.`);
           }
           if (entry.fileName.endsWith("/")) return zip.readEntry();
           zip.openReadStream(entry, (error, stream) => {
@@ -58,7 +58,7 @@ export async function inspectArchive(bytes: Buffer): Promise<Map<string, Buffer>
             stream.on("error", fail);
             stream.on("data", (chunk: Buffer) => {
               size += chunk.length;
-              if (size > entry.uncompressedSize || size > 5 * 1024 * 1024) {
+              if (size > entry.uncompressedSize || size > MAX_FILE_BYTES) {
                 stream.destroy();
                 fail(new SubmissionInputError("ZIP entry exceeds its declared size."));
               } else {

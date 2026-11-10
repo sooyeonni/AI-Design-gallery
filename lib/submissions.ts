@@ -1,12 +1,14 @@
 import { CATEGORIES } from "./types.ts";
 import type { ProjectCategory } from "./types.ts";
 
-export const MAX_ZIP_BYTES = 3 * 1024 * 1024;
-export const MAX_EXPANDED_BYTES = 20 * 1024 * 1024;
+export const MAX_ZIP_BYTES = 25 * 1024 * 1024;
+export const MAX_EXPANDED_BYTES = 100 * 1024 * 1024;
+export const MAX_FILE_BYTES = 20 * 1024 * 1024;
 export const MAX_FILES = 300;
+export const ARCHIVE_LIMITS = "25 MiB compressed, 100 MiB expanded, 20 MiB per file, and 300 entries";
 
 export const SUBMISSION_STATES = [
-  "queued", "reviewing", "needs_review", "rejected", "failed", "published",
+  "uploading", "queued", "reviewing", "needs_review", "rejected", "failed", "published",
 ] as const;
 export type SubmissionState = typeof SUBMISSION_STATES[number];
 

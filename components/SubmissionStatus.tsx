@@ -23,7 +23,7 @@ export default function SubmissionStatus() {
         if (!response.ok) throw new Error(data.error || "Could not load submission status.");
         setMessage(`${data.status.replaceAll("_", " ")}: ${data.feedback}`);
         setUrl(data.url);
-        if (data.status === "queued" || data.status === "reviewing") timer = setTimeout(refresh, 10000);
+        if (data.status === "uploading" || data.status === "queued" || data.status === "reviewing") timer = setTimeout(refresh, 10000);
       } catch (error) {
         if (!controller.signal.aborted) setMessage(error instanceof Error ? error.message : "Status unavailable.");
       }

@@ -4,6 +4,7 @@ import NavTabs from "@/components/NavTabs";
 import CopyCodeBlock from "@/components/CopyCodeBlock";
 import UploadContents from "@/components/UploadContents";
 import Footer from "@/components/Footer";
+import { ARCHIVE_LIMITS } from "@/lib/submissions";
 import { UploadProjectButton } from "@/components/UploadDialog";
 import pageStyles from "@/app/page.module.css";
 import headerStyles from "@/components/Header.module.css";
@@ -20,7 +21,7 @@ Inspect the project and use its existing documented build/export command to prep
 Put index.html at the ZIP root, or inside one wrapper folder, with all required assets.
 
 Exclude node_modules, .git, .vercel, build caches, symlinks, environment files, private keys, credentials and API tokens.
-Keep the ZIP under 3 MiB compressed, 20 MiB expanded, 5 MiB per file and 300 entries.
+Keep the ZIP within these limits: ${ARCHIVE_LIMITS}.
 Do not include package.json or vercel.json in the exported static-site ZIP.
 
 Build and test the static export locally, check its assets and ZIP limits, and report any failure. Do not claim a broken export is ready.
@@ -129,8 +130,7 @@ export default function HowToUploadPage() {
             <p className={styles.stepBody}>
               Click <strong>Upload project</strong>, enter your title, author name,
               category, and AI tools, then choose the ZIP your agent prepared.
-              ZIPs are stored privately while being checked. The limit is 3 MiB
-              compressed, 20 MiB expanded, 5 MiB per file, and 300 entries.
+              ZIPs are stored privately while being checked. The limits are {ARCHIVE_LIMITS}.
               Never upload credentials or private environment files. Save your
               private status link after uploading so you can return for updates.
             </p>

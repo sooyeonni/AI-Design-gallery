@@ -28,7 +28,11 @@ not arbitrary source builds. Server/API/database projects and uncertain results
 need further review. Missing review or deployment services block publication;
 a successful upload is not an approval.
 
-ZIP limits: **3 MiB compressed, 20 MiB expanded, 5 MiB per file, 300 entries**.
+ZIP limits: **25 MiB compressed, 100 MiB expanded, 20 MiB per file, 300 entries**.
+The browser uploads directly to private Blob storage using a short-lived,
+path-scoped token. Server-side archive checks must pass before review is queued.
+Existing installations must apply [the direct-upload migration](./supabase/direct-uploads.sql)
+before deploying this version.
 Never include secrets, private environment files, dependencies, repository metadata,
 or symlinks. You must have permission to publish all included assets.
 
@@ -173,7 +177,7 @@ Every ZIP submission must have:
 - An **author**
 - A valid **category** (see below)
 - At least one **AI tool** used
-- A ZIP up to 3 MiB compressed / 20 MiB expanded / 300 entries / 5 MiB per file
+- A ZIP up to 25 MiB compressed / 100 MiB expanded / 300 entries / 20 MiB per file
 - For automatic publication: `index.html` plus local assets, without source
   build configuration, server code or external network dependencies
 

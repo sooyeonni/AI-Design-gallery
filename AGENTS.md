@@ -36,7 +36,7 @@ Do not edit gallery metadata or push to this repository for a normal submission.
    `.vercel`, `.next`, `.npmrc`, private environment files, private keys,
    credentials, API tokens, and symlinks. Do not copy secrets into public assets.
    A secret-free `.env.example` is allowed at intake but is not part of a static export.
-7. Respect limits: **3 MiB ZIP**, **20 MiB expanded**, **5 MiB per file**,
+7. Respect limits: **25 MiB ZIP**, **100 MiB expanded**, **20 MiB per file**,
    **300 entries**. Never reuse copyrighted assets without permission.
 8. Test the exported site locally using the project's documented workflow.
    Report build failures; do not claim a broken export is ready.
