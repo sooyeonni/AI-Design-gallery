@@ -2,6 +2,7 @@ import { cp, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { getProjects } from "../lib/projects.ts";
 import { copyPagesProject, validatePagesProject } from "./pages-projects.mjs";
 
@@ -20,7 +21,9 @@ try {
     validated.push({ slug: project.slug, ...result });
   }
   // Keep the existing Vercel receipt APIs intact; export only public gallery routes.
-  for (const name of ["app", "components", "lib", "public", "projects.json", "package.json", "tsconfig.json", "next.config.ts"]) {
+  const inputs = ["app", "components", "lib", "projects.json", "package.json", "tsconfig.json", "next.config.ts"];
+  if (existsSync(path.join(root, "public"))) inputs.push("public");
+  for (const name of inputs) {
     await cp(path.join(root, name), path.join(stage, name), {
       recursive: true,
       filter: (source) => ![path.join(root, "app/api"), path.join(root, "app/submission-status")].includes(source),
