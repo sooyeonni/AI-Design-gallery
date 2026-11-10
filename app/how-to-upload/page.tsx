@@ -3,6 +3,7 @@ import Link from "next/link";
 import NavTabs from "@/components/NavTabs";
 import CopyCodeBlock from "@/components/CopyCodeBlock";
 import UploadContents from "@/components/UploadContents";
+import Footer from "@/components/Footer";
 import { UploadProjectButton } from "@/components/UploadDialog";
 import pageStyles from "@/app/page.module.css";
 import headerStyles from "@/components/Header.module.css";
@@ -13,27 +14,22 @@ export const metadata: Metadata = {
   description: "A step-by-step guide to adding your project to the AI Design Study gallery.",
 };
 
-const AGENT_PROMPT = `Help me package my project for the AI Design Study ZIP upload.
+const AGENT_PROMPT = `Package the project open in this workspace as a ZIP for AI Design Study. Prepare the file only; I will upload it myself.
 
-Inspect my project and use its existing build command to export a self-contained static website.
+Inspect the project and use its existing documented build/export command to prepare a self-contained static website.
 Put index.html at the ZIP root, or inside one wrapper folder, with all required assets.
 
 Exclude node_modules, .git, .vercel, build caches, symlinks, environment files, private keys, credentials and API tokens.
 Keep the ZIP under 3 MiB compressed, 20 MiB expanded, 5 MiB per file and 300 entries.
 Do not include package.json or vercel.json in the exported static-site ZIP.
 
-If the project needs a server, database, external API or private key, tell me before packaging. Do not silently remove features.
+Build and test the static export locally, check its assets and ZIP limits, and report any failure. Do not claim a broken export is ready.
+If the project needs a server, database, external API or private key, explain the blocker. Do not silently remove features.
 
-Ask for my project title, author name, category and AI tools used if missing.
-Do not deploy, edit gallery metadata, create a branch, commit or open a Pull Request.
-Give me the ZIP path and explain how to submit it through How to Upload.`;
-
-const REVIEW_PROMPT = `Check my submission ZIP before I upload it:
-- index.html and all local assets are included and work without external services
-- no secrets, environment files, symlinks, dependencies or repository metadata are included
-- the ZIP satisfies the displayed size and file limits
-- I have permission to publish every included asset
-Report any issue. Do not upload or deploy anything without my confirmation.`;
+Do not ask for my title, author name, category or AI tools; I will enter those on the website.
+Only ask a question if the project cannot be located or a technical blocker prevents packaging.
+Do not upload, deploy, edit gallery metadata, create a branch, commit, push or open a Pull Request.
+Give me the ZIP path and direct me to https://ai-design-gallery.vercel.app/how-to-upload to enter my project details and upload it myself.`;
 
 const STEPS = [
   { id: "get-started", title: "Get started" },
@@ -76,9 +72,9 @@ export default function HowToUploadPage() {
             <span className={styles.stepNumber}>01</span>
             <h2 className={styles.stepTitle}>Get started</h2>
             <p className={styles.stepBody}>
-              Anyone can submit a project. Prepare its title, your author name,
-              a category, and the AI tools you used. Only submit work you own
-              or have permission to publish.
+              Anyone can submit a project. Let your AI agent prepare the ZIP,
+              then upload it here yourself. No GitHub account or deployment
+              setup is needed. Only submit work you own or have permission to publish.
             </p>
           </li>
 
@@ -120,8 +116,9 @@ export default function HowToUploadPage() {
             <h2 className={styles.stepTitle}>Ask your AI agent</h2>
             <p className={styles.stepBody}>
               Ask your AI coding agent to prepare a submission ZIP from your
-              project. No repository access or metadata editing is needed.
-              Paste this prompt into your agent:
+              project. It handles the build, packaging, and checks — no project
+              details interview needed. You will enter those details on this
+              website. Paste this prompt into your agent:
             </p>
             <CopyCodeBlock label="AI agent prompt" code={AGENT_PROMPT} />
           </li>
@@ -130,12 +127,13 @@ export default function HowToUploadPage() {
             <span className={styles.stepNumber}>04</span>
             <h2 className={styles.stepTitle}>Upload your ZIP</h2>
             <p className={styles.stepBody}>
+              Click <strong>Upload project</strong>, enter your title, author name,
+              category, and AI tools, then choose the ZIP your agent prepared.
               ZIPs are stored privately while being checked. The limit is 3 MiB
               compressed, 20 MiB expanded, 5 MiB per file, and 300 entries.
               Never upload credentials or private environment files. Save your
               private status link after uploading so you can return for updates.
             </p>
-            <CopyCodeBlock label="Review instruction" code={REVIEW_PROMPT} />
             <div><UploadProjectButton /></div>
           </li>
 
@@ -160,6 +158,7 @@ export default function HowToUploadPage() {
                 <li key={stage}>{stage}</li>
               ))}
             </ol>
+            <Footer />
           </li>
         </ol>
         </div>

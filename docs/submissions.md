@@ -3,6 +3,10 @@
 ## Flow and boundaries
 
 1. Anyone can submit through **How to Upload**, without a GitHub account.
+   The participant's coding agent only builds, checks, and packages the ZIP;
+   it does not collect submission metadata or upload on their behalf.
+   Participants enter title, author, category, and AI tools in the website form
+   and upload the prepared ZIP themselves.
    **Upload project** in the shared navigation opens the upload modal on either
    page. Escape or the close button dismisses it; reopening retains the form
    and receipt during the current page session.

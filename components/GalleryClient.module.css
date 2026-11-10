@@ -145,33 +145,6 @@
   cursor: pointer;
 }
 
-.footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  margin-top: 3rem;
-  padding: 1.5rem 0;
-  border-top: 1px solid var(--line);
-  font-size: 0.75rem;
-}
-
-.footer span {
-  color: var(--muted);
-}
-
-.footer a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 44px;
-}
-
-.footer a:hover {
-  text-decoration: underline;
-}
-
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

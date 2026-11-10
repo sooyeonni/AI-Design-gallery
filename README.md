@@ -4,8 +4,36 @@ A small, polished web gallery showcasing projects built by members of the
 **AI Design Study** using AI tools such as Claude, ChatGPT, Cursor, Figma
 Make, Lovable, v0, and more.
 
-This is a lightweight community showcase, not a SaaS product — just a
-Next.js site, a JSON file, and Vercel.
+This is a community showcase with a Next.js gallery and a private ZIP
+submission pipeline. Participants do not need GitHub or Vercel accounts.
+
+Visit [AI Design Study](https://ai-design-gallery.vercel.app).
+
+## Submit your project
+
+1. Open your project in your AI coding tool and copy the packaging prompt from
+   [How to Upload](https://ai-design-gallery.vercel.app/how-to-upload).
+2. Let your agent build, test, and package a self-contained static-site ZIP.
+   It should return the ZIP path, not interview you for submission details.
+   Agent instructions: [`AGENTS.md`](./AGENTS.md).
+3. Click **Upload project** on the website. Enter your title, author name,
+   category, and AI tools, choose the ZIP, and complete the anti-bot check.
+   You upload it yourself; your agent does not submit or deploy it.
+4. Save your private status link for review feedback and deployment updates.
+5. After archive validation, self-hosted AI review, isolated desktop/mobile
+   preview checks, and a verified deployment pass, the project appears in the gallery.
+
+Automatic publication supports static exports with `index.html` and local assets,
+not arbitrary source builds. Server/API/database projects and uncertain results
+need further review. Missing review or deployment services block publication;
+a successful upload is not an approval.
+
+ZIP limits: **3 MiB compressed, 20 MiB expanded, 5 MiB per file, 300 entries**.
+Never include secrets, private environment files, dependencies, repository metadata,
+or symlinks. You must have permission to publish all included assets.
+
+For service configuration and worker operations, see the
+[submission system guide](./docs/submissions.md).
 
 ## What this is
 
@@ -26,6 +54,7 @@ Next.js site, a JSON file, and Vercel.
 - An icon-only **light / dark mode** toggle beside GitHub appears on both
   pages. The theme stays selected during navigation and resets to light
   when the page is reloaded. Illustrative preview artwork retains its colors.
+- A shared footer on both pages credits **Made by Soo** and **© 2026 AI Design Study**.
 - All project metadata lives in [`projects.json`](./projects.json), which
   retains existing/sample and maintainer-managed projects. Published ZIP
   submissions are read from Supabase alongside that file.
@@ -68,33 +97,9 @@ npm run build   # production build
 npm run start   # run the production build locally
 npm run lint    # ESLint
 npm run typecheck # generated route types + TypeScript
-npm test        # metadata and date tests (Node's built-in test runner)
+npm test        # metadata, archive, review, and database tests
 npm run validate:submissions # metadata and project-folder safety checks
 ```
-
-## Design references with Awwwards MCP
-
-The optional [workspace MCP configuration](./.vscode/mcp.json) runs
-[Awwwards MCP](https://github.com/INSANE0777/Awwwards-mcp) at the pinned
-published version `1.16.1`. It is editor tooling, not an application dependency,
-and requires Node.js 22.13 or newer (the project's Node.js 24 works).
-
-In VS Code, run **MCP: List Servers**, select **awwwards**, and start it.
-Review the server trust prompt before approving it. If its tools do not appear
-in an existing chat, start a new chat after the server is running.
-
-Use its search, site details, and collection tools to shortlist references
-before changing the gallery. No API key is required. The first launch downloads
-the package through `npx`; the server stores its reference cache under
-`~/.awwwards-mcp/` and automatically refreshes a missing or stale index.
-The basic configuration does not install the additional browser dependencies
-needed for live capture or motion analysis; use the editor's browser tools
-to preview this application instead.
-
-References are for personal design inspiration. Do not copy or redistribute
-another site's code, screenshots, or assets, and review Awwwards' terms before
-commercial use. Never send private project source or credentials to reference
-services.
 
 ## Deploying to Vercel
 
@@ -160,27 +165,6 @@ Existing repository-managed projects have:
   HTTPS URLs, real calendar dates, project folders, sensitive files, generated
   dependencies, and symlinks. Failures identify the entry or path.
 
-## How to upload a project
-
-1. Make a web project with AI. No GitHub account or deployment is needed.
-2. Ask your coding agent to prepare a self-contained static export ZIP.
-   The exact packaging instructions are in [`AGENTS.md`](./AGENTS.md).
-3. Open **How to Upload**, provide title, author, category and AI tools,
-   complete the anti-bot check and upload the ZIP.
-4. Save your private status link. It shows review feedback and deployment status.
-5. Archive validation, self-hosted AI review and an isolated desktop/mobile
-   preview must pass before a separate static Vercel deployment is created.
-6. Only a ready, reachable deployment appears in the gallery automatically.
-
-Automatic publication currently supports static exports, not arbitrary source
-builds. Server/API/database projects and uncertain results remain in review.
-If AI, sandbox or deployment services are missing, publication is blocked.
-Intake itself stays disabled until private storage and anti-bot protection
-are connected. See [operator setup](./docs/submissions.md).
-
-The full, illustrated version of this flow lives on the **How to Upload**
-page of the site itself.
-
 ## Project requirements
 
 Every ZIP submission must have:
@@ -208,7 +192,7 @@ repository metadata, Vercel state, or symlinks.
 
 ## Contributing
 
-- Project submissions: see "How to upload a project" above, or just
+- Project submissions: see "Submit your project" above, or just
   ask your AI coding agent to read [`AGENTS.md`](./AGENTS.md).
 - Gallery UI/design changes: open a Pull Request with your change. Please
   avoid introducing Tailwind or unrelated dependencies — keep
@@ -227,7 +211,7 @@ Then run `npm start` and verify:
 - Cards within each category are newest first, show all metadata, and open their HTTPS URL in
   a separate tab with `noopener noreferrer`; projects awaiting deployment
   show a non-interactive status instead of a broken link.
-- Both copy buttons copy the exact prompt, show temporary feedback, and
+- The packaging prompt's copy button copies the exact prompt, shows temporary feedback, and
   surface a helpful error if clipboard permission is denied.
 - Keyboard focus, reduced motion, and narrow mobile layouts work on both pages.
 

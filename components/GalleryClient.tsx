@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import type { Project } from "@/lib/types";
 import { CATEGORIES } from "@/lib/types";
@@ -10,6 +9,7 @@ import SearchBar from "@/components/SearchBar";
 import CategoryFilter from "@/components/CategoryFilter";
 import ProjectCard from "@/components/ProjectCard";
 import NavTabs from "@/components/NavTabs";
+import Footer from "@/components/Footer";
 import pageStyles from "@/app/page.module.css";
 import styles from "./GalleryClient.module.css";
 
@@ -142,10 +142,7 @@ export default function GalleryClient({ projects }: { projects: Project[] }) {
           ))}
         </div>
       )}
-      <footer className={styles.footer}>
-        <p>A study in making.<br /><span>Built with curiosity. Shared with everyone.</span></p>
-        <Link href="/how-to-upload">Add your project <span aria-hidden="true">↗</span></Link>
-      </footer>
+      <Footer />
       </div>
     </div>
   );
