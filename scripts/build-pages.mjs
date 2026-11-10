@@ -21,7 +21,7 @@ try {
     validated.push({ slug: project.slug, ...result });
   }
   // Keep the existing Vercel receipt APIs intact; export only public gallery routes.
-  const inputs = ["app", "components", "lib", "projects.json", "package.json", "tsconfig.json", "next.config.ts"];
+  const inputs = ["app", "components", "lib", "AGENTS.md", "projects.json", "package.json", "tsconfig.json", "next.config.ts"];
   if (existsSync(path.join(root, "public"))) inputs.push("public");
   for (const name of inputs) {
     await cp(path.join(root, name), path.join(stage, name), {

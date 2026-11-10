@@ -31,6 +31,11 @@ GitHub Actions and GitHub Pages.
 
 Your AI coding agent can help: copy the prompt on **How to Upload** or use
 [AGENTS.md](./AGENTS.md). Confirm before it pushes or opens a PR.
+The guide includes a beginner glossary, illustrated Fork/file-layout/PR comparisons,
+click-by-click instructions, and troubleshooting. Read AGENTS.md on GitHub or download
+the current file from the guide; attach it to your agent chat without overwriting
+any instructions in your own project. The download is generated from this repository's
+AGENTS.md during the build so the two stay in sync.
 All submitted files and Git history are public. Do not submit confidential/company
 files or assets without permission. A GitHub account is required; a Vercel account is not.
 

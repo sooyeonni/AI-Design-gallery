@@ -84,6 +84,170 @@
   line-height: 1.65;
 }
 
+.substeps a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.startHere,
+.resourceCard,
+.notice,
+.troubleshooting {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  font-size: 0.8rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.startHere {
+  margin-top: 1.25rem;
+}
+
+.startHere > p,
+.resourceCard > p {
+  margin-top: 0.5rem;
+}
+
+.glossary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+  margin-top: 1rem;
+}
+
+.glossary dt,
+.troubleshooting dt {
+  font-weight: 600;
+}
+
+.glossary dd,
+.illustration figcaption,
+.mockHint {
+  color: var(--muted);
+}
+
+.resourceActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.resourceActions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.resourceActions a:hover {
+  background: var(--hover);
+}
+
+.illustration {
+  min-width: 0;
+  margin: 0.25rem 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.browserBar {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--selected);
+  color: var(--muted);
+}
+
+.mockScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+
+.mockRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mockButton,
+.mockPrimary {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.mockPrimary {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.mockField {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.mockDivider {
+  border-top: 1px solid var(--line);
+}
+
+.illustration figcaption {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.fileTree {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.7rem;
+}
+
+.compareGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.compareArrow {
+  font-size: 1.25rem;
+}
+
+.troubleshooting summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.troubleshooting dt {
+  margin-top: 0.75rem;
+}
+
 .substeps {
   display: flex;
   flex-direction: column;
@@ -185,6 +349,19 @@
 }
 
 @media (max-width: 520px) {
+  .glossary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .compareGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .compareArrow {
+    transform: rotate(90deg);
+    justify-self: center;
+  }
+
   .examples {
     grid-template-columns: minmax(0, 1fr);
   }
