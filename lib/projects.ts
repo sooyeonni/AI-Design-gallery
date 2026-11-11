@@ -10,6 +10,11 @@ function isText(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+function isGitHubUsername(value: unknown): value is string {
+  return typeof value === "string" &&
+    /^(?!.*--)[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?$/i.test(value);
+}
+
 export function parseProjects(data: unknown): Project[] {
   if (!Array.isArray(data)) throw new Error("projects.json must contain an array.");
   const seenSlugs = new Set<string>();
@@ -23,6 +28,10 @@ export function parseProjects(data: unknown): Project[] {
     }
     if (!("title" in entry) || !isText(entry.title)) return fail("title is required.");
     if (!("author" in entry) || !isText(entry.author)) return fail("author is required.");
+    const githubUsername = "githubUsername" in entry ? entry.githubUsername : undefined;
+    if (githubUsername !== undefined && !isGitHubUsername(githubUsername)) {
+      return fail("githubUsername must be a valid GitHub username.");
+    }
     if (!("category" in entry) || !isCategory(entry.category)) return fail("unknown category.");
     if (!("tools" in entry) || !Array.isArray(entry.tools) ||
         entry.tools.length === 0 || !entry.tools.every(isText)) {
@@ -60,6 +69,9 @@ export function parseProjects(data: unknown): Project[] {
     return {
       title: entry.title,
       author: entry.author,
+      ...(githubUsername !== undefined
+        ? { githubUsername }
+        : {}),
       category: entry.category,
       tools: entry.tools,
       slug: entry.slug,

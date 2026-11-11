@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import type { Project } from "@/lib/types";
 import { CATEGORIES } from "@/lib/types";
+import { getContributors } from "@/lib/contributors";
 import Header from "@/components/Header";
 import SearchBar from "@/components/SearchBar";
 import CategoryFilter from "@/components/CategoryFilter";
@@ -14,14 +15,6 @@ import pageStyles from "@/app/page.module.css";
 import styles from "./GalleryClient.module.css";
 
 const FILTERS = ["All", ...CATEGORIES];
-const CONTRIBUTORS = [
-  {
-    username: "sooyeonni",
-    name: "sooyeonni",
-    avatar: "https://avatars.githubusercontent.com/u/29706402?v=4",
-    url: "https://github.com/sooyeonni",
-  },
-];
 
 export default function GalleryClient({ projects }: { projects: Project[] }) {
   const [query, setQuery] = useState("");
@@ -32,6 +25,7 @@ export default function GalleryClient({ projects }: { projects: Project[] }) {
     () => new Set(projects.map((project) => project.category)).size,
     [projects]
   );
+  const contributors = useMemo(() => getContributors(projects), [projects]);
 
   const matchingQuery = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -66,7 +60,7 @@ export default function GalleryClient({ projects }: { projects: Project[] }) {
         <section className={styles.contributors} aria-labelledby="contributors-heading">
           <h2 id="contributors-heading" className={styles.sidebarHeading}>Contributors</h2>
           <ul className={styles.contributorList}>
-            {CONTRIBUTORS.map((contributor) => (
+            {contributors.map((contributor) => (
               <li key={contributor.username}>
                 <a
                   href={contributor.url}
@@ -135,7 +129,7 @@ export default function GalleryClient({ projects }: { projects: Project[] }) {
               <h2 id={`category-${group.name}`} className={styles.groupHeading}>{group.name}</h2>
               <div className={view === "gallery" ? styles.grid : styles.list}>
                 {group.projects.map((project) => (
-                  <ProjectCard key={project.slug} project={project} index={projects.indexOf(project)} view={view} />
+                  <ProjectCard key={project.slug} project={project} view={view} />
                 ))}
               </div>
             </section>

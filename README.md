@@ -1,148 +1,115 @@
-# AI Design Study — Gallery
+# AI Design Study Gallery 🎨
 
-A gallery of things we make with AI, published with free public-repository
-GitHub Actions and GitHub Pages.
+A community gallery for projects made with AI. Projects are shared as static
+websites and published on GitHub Pages.
 
-**Site:** https://sooyeonni.github.io/AI-Design-gallery/
+**Visit the gallery:** https://sooyeonni.github.io/AI-Design-gallery/
 
-## Submit a project
+## Add your project 📂
 
-1. Create a free GitHub account and fork this repository.
-2. Build and locally test your project's static export with its existing workflow.
-3. Add only the exported files to `projects/<slug>/`, including `index.html`.
-   Use relative asset paths so they work under
-   `/AI-Design-gallery/projects/<slug>/`, not just at a domain root.
-4. Add one entry to [projects.json](./projects.json):
+The easiest way to contribute is to submit a pull request (PR). If you have
+write access to the gallery repository, create a new branch there for each
+project—no fork is needed. Otherwise, fork the gallery once and reuse your fork
+with a new branch for each submission.
+
+1. Sign in to GitHub. If you do not have write access to this repository,
+   [fork it](https://github.com/sooyeonni/AI-Design-gallery/fork), or reuse your
+   existing fork.
+2. Follow your project's own build instructions to create and test a static
+   export on your computer. The gallery's CI checks exported files but does not
+   run your project's build scripts.
+3. In the repository you will submit from (the gallery itself if you have write
+   access, or your fork), create a new branch and add the export to
+   `projects/<your-project-slug>/`. Put an `index.html` at the folder root and
+   use relative paths for assets so the project works from its gallery URL.
+4. Add one entry for your project to [projects.json](./projects.json):
 
    ```json
    {
      "title": "My project",
-     "author": "Soo",
+     "author": "Your name",
+     "githubUsername": "your-github-username",
      "category": "Prototype",
      "tools": ["Claude Code"],
      "slug": "my-project",
-     "createdAt": "2026-11-09"
+     "createdAt": "YYYY-MM-DD"
    }
    ```
 
-5. Leave out `url` and `sample`. Push a branch to your fork and open a PR to `main`.
-6. File checks run; Soo reviews and merges. GitHub Actions captures your opening
-   screen and publishes the gallery and approved files. No thumbnail upload is
-   needed. A failed capture or deployment leaves the old site live.
+   Choose a category from **Slides**, **Prototype**, **Experiment**, **Tool**,
+   or **Other**. Use your exact GitHub username for `githubUsername`; it adds
+   you to the gallery's contributor list. Use a unique, lowercase, kebab-case
+   slug. Do not add `url` or `sample` to a new entry.
+5. Push your branch to that repository and open a PR to
+   `sooyeonni/AI-Design-gallery`'s `main` branch. If you use a branch in the
+   gallery repository, do not push directly to `main`. Check that the PR
+   includes only your project folder and its `projects.json` entry.
+6. After review and merge, GitHub checks and publishes the gallery. It also
+   captures a thumbnail of your project's opening screen; you do not need to
+   upload one. A failed check or capture prevents the update from being
+   published, so the current live gallery stays available.
 
-Your AI coding agent can help: copy the prompt on **How to Upload** or use
-[AGENTS.md](./AGENTS.md). Confirm before it pushes or opens a PR.
-The guide includes five short steps, project examples and suggested AI tools.
-Read AGENTS.md on GitHub or download
-the current file from the guide; attach it to your agent chat without overwriting
-any instructions in your own project. The download is generated from this repository's
-AGENTS.md during the build so the two stay in sync.
-All submitted files and Git history are public. Do not submit confidential/company
-files or assets without permission. A GitHub account is required; a Vercel account is not.
+Need a hand? The [How to Upload guide](https://sooyeonni.github.io/AI-Design-gallery/how-to-upload/)
+has step-by-step instructions and a prompt you can give your coding agent. The
+prompt checks whether you can use a branch in the gallery repository or need
+to submit from a fork.
+You can also read [AGENTS.md](./AGENTS.md) for detailed submission requirements.
+Always review your agent's changes, and confirm before it pushes or opens a PR.
 
-Categories: **Slides, Prototype, Experiment, Tool, Other**.
+## What can I submit? 🔍
 
-## Supported projects and limits
+Projects must be self-contained static websites: HTML, CSS, JavaScript, and
+local assets. Local images, fonts, audio/video, and supported model files such
+as `.wasm`, `.task`, `.tflite`, and `.bin` are allowed.
 
-- Static HTML/CSS/JavaScript with local assets. Local MediaPipe `.wasm`, `.task`,
-  `.tflite`, and `.bin` files are supported, but no automated webcam interaction
-  testing is claimed. Test camera features over localhost/HTTPS yourself.
-- **100 MiB per project, 20 MiB per file, 300 files/directories.**
-- No server functions, databases, secret API keys, build configuration, hidden files,
-  dependencies, symlinks, or ZIP uploads. Export locally; CI does not build submissions.
-- Keep all projects together under 750 MiB to leave room for the gallery.
-- Existing reviewed entries with explicit HTTPS `url` values retain those URLs.
-  Existing sample entries remain labeled; new PRs must not add sample flags.
+- Maximum **100 MiB per project**, **20 MiB per file**, and **300 files and
+  directories** per project.
+- Keep all projects together under **750 MiB** to leave room for the gallery.
+- Include only files needed to run the exported site. Do not include
+  dependencies, build configuration, server code, hidden files, symlinks,
+  environment files, or secrets.
+- Projects that need a server, database, or secret API key cannot run as static
+  exports. Explain any features that cannot be included; do not remove them
+  without telling the project owner.
 
-This is a **trusted study-member showcase**, not an arbitrary untrusted app host.
-Projects share the `sooyeonni.github.io` origin with the gallery and any other
-Pages projects on that account. They are not isolated by subfolder.
-Review scripts, service workers, and external data requests before merging.
-Do not host logins or sensitive transactions. CI checks reduce risk but do not
-certify safety, asset permissions, or functional correctness.
+All submitted files and Git history are public. Only submit work and assets you
+have permission to share. Projects share the `sooyeonni.github.io` website
+origin with the gallery, so do not include logins, sensitive transactions, or
+other private data. Camera features are not tested automatically; test them
+yourself over localhost or HTTPS.
 
-## Development
+## For gallery contributors and maintainers
 
-Node.js 24 and npm:
+This section is for people working on the gallery itself—not for submitting a
+project. You need **Node.js 24** and npm to run the gallery locally:
 
 ```bash
 npm ci
 npm run dev
+```
+
+To check your changes before opening a PR:
+
+```bash
 npm run lint
 npm run typecheck
 npm test
 npm run validate:submissions
-npm run build:pages
 ```
 
-`build:pages` produces `out/` with repository-prefixed gallery assets and
-`projects/<slug>/` static exports. It builds in a temporary directory, excludes
-legacy API/status routes, copies only validated static project files, and cleans
-the temporary build. It never copies private environment files into the export.
-No submission services or credentials are required.
+Maintainers can build the GitHub Pages version with `npm run build:pages`.
+It creates a static export in `out/` and copies only validated project files;
+it does not run submitted build scripts. For an exact preview of the Pages
+paths, serve `out/` at `/AI-Design-gallery/`.
 
-To preview the exact Pages paths, serve the repository root with a local static
-server or mount `out/` at `/AI-Design-gallery/`. Do not execute submitted scripts
-on a company computer. Maintainers should inspect code and use a separately
-isolated environment for interactive review of unfamiliar projects.
+## Publishing and previous submissions 📚
 
-## GitHub Pages setup
+The gallery is published from this public repository using GitHub Actions and
+GitHub Pages. No paid hosting account is needed. Maintainers can find setup and
+deployment details in the
+[Pages workflow](./.github/workflows/deploy-pages.yml).
 
-1. Keep this repository **public**.
-2. In **Settings → Pages**, select **GitHub Actions** as the source.
-3. Merge to `main`, or run **Publish gallery to GitHub Pages** from Actions.
-4. Check the workflow's deployment URL. No custom domain or paid server is required.
-
-The workflow builds on a standard `ubuntu-latest` runner with read-only repository
-permission and no deployment secrets. A separate deploy job receives only Pages/OIDC
-permissions and deploys the artifact. Submitted build scripts are never executed.
-PR validation has no secrets; first-time contributors may need workflow approval.
-Protect `main` and review infrastructure changes before merging.
-
-Between build and deploy, a separate read-only capture job renders reviewed static
-exports in a non-root Playwright Docker container. The container has no credentials,
-Docker socket, host network, or external network access; exports are mounted read-only.
-Capabilities are dropped, privilege escalation is disabled, and CPU, memory, process,
-temporary storage and workflow runtime are limited. Chromium's internal sandbox is
-disabled inside this restricted container; do not treat Docker as a safety certification
-or use this workflow for arbitrary unreviewed submissions.
-Each project gets a fresh browser context with service workers/downloads blocked.
-Only the project's own files are served, under the exact Pages subfolder.
-Opening screens are captured at 1280 × 720 after fonts load and a short render delay,
-without clicking, signing in, or granting camera/microphone permissions.
-External requests are blocked, so assets must be local. JavaScript errors or capture
-failures stop publication, with details in Actions. This is a thumbnail check, not a
-functional or security review. Existing externally hosted URLs are not captured.
-
-The worker's Playwright package and container image versions must match; its npm
-lockfile lives in `scripts/thumbnail-worker/`. Generated PNGs are checked for a
-regular file, size, format and dimensions before being added to the Pages artifact.
-They are not committed to Git. `build:pages` alone produces a capture manifest,
-not screenshots; automatic capture runs only on GitHub after merge or manual dispatch.
-Do not run the screenshot worker with unfamiliar submissions on a company computer.
-
-The workflow uses one-day Pages artifacts, no Actions cache, no paid runners,
-and no external AI or Vercel deployment service. Free services have quotas:
-Pages sites are at most 1 GB with a 100 GB/month soft bandwidth limit.
-Repository history and artifacts also consume storage. Stay within GitHub's
-terms; do not enable paid features or assume unlimited capacity.
-
-Official limits: [Pages](https://docs.github.com/pages/getting-started-with-github-pages/github-pages-limits)
-and [Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
-
-## Previous ZIP/Vercel system
-
-New ZIP intake is closed (POST returns 410). Existing private submissions, Blob
-files and Supabase records are **not deleted or published** by this migration.
-Existing private receipts remain on the old Vercel site's `/submission-status`
-and its API; they do not move to Pages. The old Vercel application can still be
-built with `npm run build`, but is not required for new Pages submissions.
-Historical operational details: [ZIP system](./docs/submissions.md).
-
-The former Vercel project-deployment workflow is replaced by Pages. Legacy scripts
-are retained but do not run automatically. Do not run them for new submissions.
-No Vercel/Supabase/Blob services, keys, or billing settings are removed automatically:
-only disconnect/delete them after separately confirming retention and old receipts.
-
-The gallery retains search, category filters, Gallery/List views, light/dark mode,
-contributor links, and the shared **Made by Soo · © 2026 AI Design Study** footer.
+New projects use static-export PRs; ZIP uploads are closed. Historical ZIP/Vercel
+submission records and receipt endpoints are retained and are not part of the
+new publishing flow. See the [historical submission notes](./docs/submissions.md)
+for details.

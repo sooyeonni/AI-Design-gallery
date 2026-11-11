@@ -2,6 +2,7 @@
   {
     "title": "Blow & Pop",
     "author": "Soo",
+    "githubUsername": "sooyeonni",
     "category": "Experiment",
     "tools": ["Github Copilot", "MediaPipe", "React", "TypeScript"],
     "slug": "blow-and-pop",
@@ -10,9 +11,19 @@
   {
     "title": "Responsible AI & AI Safety",
     "author": "Soo",
+    "githubUsername": "sooyeonni",
     "category": "Slides",
     "tools": ["VS Code", "GitHub Copilot"],
     "slug": "responsible-ai-safety",
+    "createdAt": "2026-11-10"
+  },
+  {
+    "title": "Headless Design Study",
+    "author": "Tae Lim",
+    "githubUsername": "worktaelim",
+    "category": "Slides",
+    "tools": ["ChatGPT", "Codex", "Claude Code"],
+    "slug": "headless-design-study",
     "createdAt": "2026-11-10"
   }
 ]

@@ -10,6 +10,8 @@ export interface Project {
   title: string;
   /** Author / member name */
   author: string;
+  /** GitHub username used for the gallery's contributor link */
+  githubUsername?: string;
   /** One of the supported gallery categories */
   category: ProjectCategory;
   /** AI tool(s) used to build the project */
