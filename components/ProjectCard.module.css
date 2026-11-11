@@ -164,6 +164,11 @@
   text-underline-offset: 3px;
 }
 
+.titleLink:hover .title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .author {
   font-size: 0.65rem;
   line-height: 1.5;
@@ -183,19 +188,27 @@
 
 .card[data-view="list"] {
   --thumbnail-width: 8rem;
+  display: grid;
+  grid-template-columns: var(--thumbnail-width) minmax(0, 1fr);
+  align-items: stretch;
+  column-gap: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--line);
 }
 
 .card[data-view="list"] .projectLink {
-  display: grid;
-  grid-template-columns: var(--thumbnail-width) minmax(0, 1fr);
-  align-items: center;
-  gap: 0.5rem 1rem;
+  min-width: 0;
 }
 
 .card[data-view="list"] .preview {
   padding: 0.5rem;
+}
+
+.listContent {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .card[data-view="list"] .previewTitle {
@@ -207,17 +220,17 @@
   font-size: 0.9rem;
 }
 
-.card[data-view="list"] .pending {
-  grid-column: 2;
-}
-
-.card[data-view="list"] .author,
-.card[data-view="list"] .details {
-  margin-left: calc(var(--thumbnail-width) + 1rem);
-}
-
 .card[data-view="list"] .author {
-  margin-top: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.card[data-view="list"] .details {
+  margin-top: 0.2rem;
+}
+
+.card[data-view="list"] .pending {
+  min-height: 0;
+  margin-top: 0.2rem;
 }
 
 @media (max-width: 640px) {
