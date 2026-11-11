@@ -10,28 +10,32 @@ import styles from "./how-to-upload.module.css";
 
 export const metadata: Metadata = {
   title: "How to Upload · AI Design Study",
-  description: "Fork the gallery, ask your AI agent to prepare a project, and send a Pull Request.",
+  description: "Prepare a project with your AI agent and submit it with a Pull Request.",
 };
 
 const AGENT_PROMPT = `Help me submit my project to AI Design Study.
-My fork URL: https://github.com/[your-username]/AI-Design-gallery
+Gallery repository: https://github.com/sooyeonni/AI-Design-gallery
+My existing fork URL (optional): [paste it here, or leave blank]
 
 Read and follow:
 https://github.com/sooyeonni/AI-Design-gallery/blob/main/AGENTS.md
 If you cannot read it, ask me to attach AGENTS.md.
 
-Use the project open in my workspace. Keep it intact and clone my fork into a separate folder.
-Ask only for missing title, author, category and AI tools.
+Use the project open in my workspace. Keep it intact; prepare the gallery submission in a separate folder.
+Do not require the gallery repository to be a fork. Check which GitHub account is authenticated and whether it has write access to sooyeonni/AI-Design-gallery.
+If I have write access, use the canonical gallery repository and create a new branch there. Otherwise, use my existing fork if supplied; if I have no fork, ask me to create one or provide its URL.
+Never push directly to main. Do not ask for passwords or tokens in chat.
+Ask only for missing title, author, GitHub username, category and AI tools.
 Build and test a static export with local assets and working subfolder paths.
 Do not silently remove features; explain any export blocker.
-Add the export to projects/<slug>/ and its entry to projects.json. Omit url and sample.
+Add the export to projects/<slug>/ and its entry to projects.json, including githubUsername so the contributor appears in the gallery. Omit url and sample.
 Change only my project folder and metadata entry. Never include secrets or private files.
-Create a branch and prepare a PR to sooyeonni/AI-Design-gallery:main.
-Ask for confirmation before pushing or opening the PR. Never ask for passwords or tokens in chat.
+Create a new branch and prepare a PR to sooyeonni/AI-Design-gallery:main, using the canonical repository as the PR source only if I have write access; otherwise use my fork.
+Ask for confirmation before pushing or opening the PR.
 Give me the PR link, or simple manual steps if GitHub access is unavailable.`;
 
 const STEPS = [
-  { id: "get-started", title: "Create your fork" },
+  { id: "get-started", title: "Get GitHub ready" },
   { id: "build-and-prepare", title: "Build & prepare" },
   { id: "ask-your-ai-agent", title: "Ask your AI agent" },
   { id: "submit-your-pr", title: "Submit your PR" },
@@ -64,13 +68,14 @@ export default function HowToUploadPage() {
           <ol className={styles.steps}>
             <li id="get-started" className={styles.step}>
               <span className={styles.stepNumber}>01</span>
-              <h2 className={styles.stepTitle}>Create your fork</h2>
-              <p className={styles.stepBody}>A fork is your own copy of the gallery on GitHub.
-                You only need to make it once.</p>
+              <h2 className={styles.stepTitle}>Get GitHub ready</h2>
+              <p className={styles.stepBody}>If you can push to the gallery repository,
+                you can create a new branch there—no fork needed. Otherwise, make a fork
+                once and reuse it for future projects.</p>
               <ol className={styles.substeps}>
                 <li><a href="https://github.com/signup" target="_blank" rel="noopener noreferrer">Sign up</a> or sign in to your personal GitHub account.</li>
-                <li><a href="https://github.com/sooyeonni/AI-Design-gallery/fork" target="_blank" rel="noopener noreferrer">Open the Fork page</a>. Choose your account as <strong>Owner</strong>, keep the name, and click <strong>Create fork</strong>.</li>
-                <li>Copy your new repository URL: <strong>github.com/your-username/AI-Design-gallery</strong>.</li>
+                <li>If you do not have write access to the gallery, <a href="https://github.com/sooyeonni/AI-Design-gallery/fork" target="_blank" rel="noopener noreferrer">create a fork</a>. Choose your account as <strong>Owner</strong>, keep the name, and click <strong>Create fork</strong>.</li>
+                <li>Reuse your fork for future submissions. If you have write access, your agent can instead make a branch in <strong>sooyeonni/AI-Design-gallery</strong>.</li>
               </ol>
             </li>
             <li id="build-and-prepare" className={styles.step}>
@@ -104,8 +109,9 @@ export default function HowToUploadPage() {
               <span className={styles.stepNumber}>03</span>
               <h2 className={styles.stepTitle}>Ask your AI agent</h2>
               <p className={styles.stepBody}>Open your project in a coding tool such as Cursor,
-                Claude Code, or Copilot. Paste this prompt and replace the fork URL with yours.
-                The agent will prepare the files and project details.</p>
+                Claude Code, or Copilot. Paste this prompt and add your existing fork URL
+                only if you need one. The agent will check whether you can use the gallery
+                repository directly and ask for your GitHub username to list you as a contributor.</p>
               <div className={styles.resourceActions} aria-label="Agent instructions">
                 <a href="https://github.com/sooyeonni/AI-Design-gallery/blob/main/AGENTS.md"
                   target="_blank" rel="noopener noreferrer">

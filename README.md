@@ -7,7 +7,9 @@ GitHub Actions and GitHub Pages.
 
 ## Submit a project
 
-1. Create a free GitHub account and fork this repository.
+1. Sign in to GitHub. If you have write access to this repository, create a new
+   branch for each submission. Otherwise, fork this repository once and reuse
+   your fork with a new branch for each project.
 2. Build and locally test your project's static export with its existing workflow.
 3. Add only the exported files to `projects/<slug>/`, including `index.html`.
    Use relative asset paths so they work under
@@ -17,7 +19,8 @@ GitHub Actions and GitHub Pages.
    ```json
    {
      "title": "My project",
-     "author": "Soo",
+     "author": "Your name",
+     "githubUsername": "your-github-username",
      "category": "Prototype",
      "tools": ["Claude Code"],
      "slug": "my-project",
@@ -25,7 +28,10 @@ GitHub Actions and GitHub Pages.
    }
    ```
 
-5. Leave out `url` and `sample`. Push a branch to your fork and open a PR to `main`.
+   Use your exact GitHub username for `githubUsername`; it adds you to the
+   gallery's contributor list. Choose a category from **Slides**, **Prototype**,
+   **Experiment**, **Tool**, or **Other**.
+5. Leave out `url` and `sample`. Push your branch and open a PR to `main`.
 6. File checks run; Soo reviews and merges. GitHub Actions captures your opening
    screen and publishes the gallery and approved files. No thumbnail upload is
    needed. A failed capture or deployment leaves the old site live.
