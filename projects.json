@@ -6,5 +6,13 @@
     "tools": ["Github Copilot", "MediaPipe", "React", "TypeScript"],
     "slug": "blow-and-pop",
     "createdAt": "2026-11-09"
+  },
+  {
+    "title": "Responsible AI & AI Safety",
+    "author": "Sooyeon Hwang",
+    "category": "Slides",
+    "tools": ["VS Code", "GitHub Copilot"],
+    "slug": "responsible-ai-safety",
+    "createdAt": "2026-11-10"
   }
 ]
