@@ -9,7 +9,7 @@
 
 .list {
   display: flex;
-  gap: 1.25rem;
+  gap: 0.25rem;
   list-style: none;
 }
 
@@ -25,7 +25,7 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 0.5rem;
+  padding: 0.5rem 0.65rem;
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0;
@@ -45,10 +45,10 @@
 .link[data-active="true"]::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 0.65rem;
+  right: 0.65rem;
   bottom: -1px;
-  height: 4px;
+  height: 2px;
   background: var(--foreground);
 }
 
@@ -57,7 +57,6 @@
   outline-offset: 4px;
 }
 
-.upload,
 .github,
 .themeToggle {
   display: inline-flex;
@@ -73,19 +72,6 @@
   font-weight: 500;
   color: var(--foreground);
   transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.upload {
-  cursor: pointer;
-  border-color: #000;
-  background: #000;
-  color: #fff;
-  white-space: nowrap;
-}
-
-.upload:hover {
-  border-color: #303030;
-  background: #303030;
 }
 
 .themeToggle {
@@ -106,7 +92,6 @@
   height: 16px;
 }
 
-.upload:focus-visible,
 .github:focus-visible,
 .themeToggle:focus-visible {
   outline: 2px solid var(--foreground);
