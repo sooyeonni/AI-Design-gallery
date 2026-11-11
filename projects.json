@@ -2,6 +2,7 @@
   {
     "title": "Blow & Pop",
     "author": "Soo",
+    "githubUsername": "sooyeonni",
     "category": "Experiment",
     "tools": ["Github Copilot", "MediaPipe", "React", "TypeScript"],
     "slug": "blow-and-pop",
@@ -10,6 +11,7 @@
   {
     "title": "Headless Design Study",
     "author": "Tae Lim",
+    "githubUsername": "worktaelim",
     "category": "Slides",
     "tools": [
       "ChatGPT",

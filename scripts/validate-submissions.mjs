@@ -20,7 +20,16 @@ if (process.env.BASE_SHA) {
       encoding: "utf8",
     }),
   );
-  validateParticipantUrls(projects, parseProjects(baseMetadata));
+  const baseProjects = parseProjects(baseMetadata);
+  validateParticipantUrls(projects, baseProjects);
+  const baseSlugs = new Set(baseProjects.map((project) => project.slug));
+  for (const project of projects.filter((entry) => !entry.sample && !baseSlugs.has(entry.slug))) {
+    if (!project.githubUsername) {
+      throw new Error(
+        `New project ${project.slug} must include githubUsername so its contributor appears in the gallery.`,
+      );
+    }
+  }
 }
 
 for (const project of projects.filter((entry) => !entry.sample)) {

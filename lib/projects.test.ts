@@ -67,6 +67,14 @@ test("valid metadata and multiple tools survive parsing without mutating input",
   assert.deepEqual(input, original);
 });
 
+test("GitHub usernames are retained and validated when provided", () => {
+  const [parsed] = parseProjects([{ ...project, githubUsername: "Study-Member7" }]);
+  assert.equal(parsed.githubUsername, "Study-Member7");
+  for (const githubUsername of ["", "-leading", "trailing-", "two--hyphens", "has spaces", "x".repeat(40)]) {
+    assert.throws(() => parseProjects([{ ...project, githubUsername }]), /githubUsername/);
+  }
+});
+
 test("an empty collection is valid", () => {
   assert.deepEqual(parseProjects([]), []);
 });
