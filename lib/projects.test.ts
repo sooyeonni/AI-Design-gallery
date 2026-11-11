@@ -31,6 +31,22 @@ test("repository data parses and sorts newest first", () => {
   }
 });
 
+test("Headless Design Study and Responsible AI use separate project and thumbnail slugs", () => {
+  const projects = getProjects();
+  const headless = projects.find((entry) => entry.title === "Headless Design Study");
+  const responsible = projects.find((entry) => entry.title === "Responsible AI & AI Safety");
+  const base = "https://sooyeonni.github.io/AI-Design-gallery";
+
+  assert.ok(headless);
+  assert.ok(responsible);
+  assert.equal(headless.slug, "headless-design-study");
+  assert.equal(headless.url, `${base}/projects/headless-design-study/`);
+  assert.equal(headless.thumbnailUrl, `${base}/thumbnails/headless-design-study.png`);
+  assert.equal(responsible.slug, "responsible-ai-safety");
+  assert.equal(responsible.url, `${base}/projects/responsible-ai-safety/`);
+  assert.equal(responsible.thumbnailUrl, `${base}/thumbnails/responsible-ai-safety.png`);
+});
+
 test("participant metadata cannot override generated thumbnails", () => {
   assert.equal(parseProjects([{ ...project, thumbnailUrl: "https://example.com/fake.png" }])[0].thumbnailUrl, undefined);
 });
