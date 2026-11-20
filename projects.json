@@ -33,6 +33,12 @@
     "category": "Experiment",
     "tools": ["Claude Code", "MediaPipe", "Three.js", "React", "TypeScript"],
     "slug": "blow-pop-sqkim",
+    "title": "AI Design Gallery",
+    "author": "Soo",
+    "githubUsername": "sooyeonni",
+    "category": "Slides",
+    "tools": ["GitHub Copilot"],
+    "slug": "ai-design-gallery",
     "createdAt": "2026-11-19"
   }
 ]
