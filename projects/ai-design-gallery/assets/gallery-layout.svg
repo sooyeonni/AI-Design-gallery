@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrative gallery layout</title>
+  <desc id="desc">A generic diagram of a gallery page. The live page is available from the link beside it.</desc>
+  <rect width="1280" height="720" fill="#f4f3ed"/>
+  <rect x="35" y="30" width="1210" height="660" rx="22" fill="#fff" stroke="#deded7" stroke-width="2"/>
+  <path d="M35 105h1210" stroke="#e6e5df" stroke-width="2"/>
+  <text x="74" y="77" fill="#292924" font-family="Inter,Arial,sans-serif" font-size="17" font-weight="750" letter-spacing="1.5">AI DESIGN STUDY</text>
+  <text x="818" y="76" fill="#65645d" font-family="Inter,Arial,sans-serif" font-size="15">Gallery</text>
+  <text x="912" y="76" fill="#65645d" font-family="Inter,Arial,sans-serif" font-size="15">How to Upload</text>
+  <rect x="1067" y="52" width="143" height="34" rx="17" fill="#eeeee8"/>
+  <text x="1138" y="74" text-anchor="middle" fill="#5b5a54" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="750" letter-spacing="1">ORIGINAL DIAGRAM</text>
+  <text x="76" y="164" fill="#282823" font-family="Inter,Arial,sans-serif" font-size="36" font-weight="750" letter-spacing="-1.2">Explore the project gallery</text>
+  <text x="78" y="194" fill="#74736b" font-family="Inter,Arial,sans-serif" font-size="15">A simplified visual guide — open the live page to see current projects.</text>
+  <rect x="78" y="218" width="57" height="29" rx="14.5" fill="#292924"/>
+  <text x="106.5" y="237" text-anchor="middle" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="650">All</text>
+  <rect x="145" y="218" width="69" height="29" rx="14.5" fill="#f4f3ee" stroke="#e4e3dc"/>
+  <text x="179.5" y="237" text-anchor="middle" fill="#55544e" font-family="Inter,Arial,sans-serif" font-size="11">Slides</text>
+  <rect x="224" y="218" width="87" height="29" rx="14.5" fill="#f4f3ee" stroke="#e4e3dc"/>
+  <text x="267.5" y="237" text-anchor="middle" fill="#55544e" font-family="Inter,Arial,sans-serif" font-size="11">Prototype</text>
+  <g>
+    <rect x="78" y="269" width="352" height="367" rx="15" fill="#fff" stroke="#e5e4de" stroke-width="2"/>
+    <rect x="95" y="286" width="318" height="216" rx="10" fill="#e8e3fc"/>
+    <circle cx="204" cy="394" r="65" fill="#b9a9ef"/>
+    <path d="M115 469c44-54 93-47 129-5 41-47 92-47 149 16H115z" fill="#8470d0"/>
+    <text x="97" y="536" fill="#85837b" font-family="Inter,Arial,sans-serif" font-size="10" font-weight="750" letter-spacing="1">SLIDES · GENERIC</text>
+    <text x="97" y="568" fill="#292924" font-family="Inter,Arial,sans-serif" font-size="19" font-weight="700">Concept Study</text>
+    <text x="97" y="596" fill="#73726a" font-family="Inter,Arial,sans-serif" font-size="12">A visual story about an idea.</text>
+  </g>
+  <g>
+    <rect x="464" y="269" width="352" height="367" rx="15" fill="#fff" stroke="#e5e4de" stroke-width="2"/>
+    <rect x="481" y="286" width="318" height="216" rx="10" fill="#e1efe6"/>
+    <rect x="518" y="337" width="102" height="115" rx="11" fill="#a2cbb0"/>
+    <rect x="637" y="315" width="135" height="54" rx="10" fill="#fff"/>
+    <rect x="637" y="382" width="135" height="69" rx="10" fill="#c6e1ce"/>
+    <path d="M536 427l24-28 25 18 34-48" fill="none" stroke="#477c5d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="483" y="536" fill="#85837b" font-family="Inter,Arial,sans-serif" font-size="10" font-weight="750" letter-spacing="1">PROTOTYPE · GENERIC</text>
+    <text x="483" y="568" fill="#292924" font-family="Inter,Arial,sans-serif" font-size="19" font-weight="700">Interactive Sketch</text>
+    <text x="483" y="596" fill="#73726a" font-family="Inter,Arial,sans-serif" font-size="12">A small experiment you can try.</text>
+  </g>
+  <g>
+    <rect x="850" y="269" width="352" height="367" rx="15" fill="#fff" stroke="#e5e4de" stroke-width="2"/>
+    <rect x="867" y="286" width="318" height="216" rx="10" fill="#fae8df"/>
+    <path d="M890 449h272" stroke="#e5c4b8" stroke-width="2"/>
+    <rect x="896" y="357" width="72" height="92" rx="10" fill="#fff4ed"/>
+    <rect x="985" y="322" width="78" height="127" rx="10" fill="#e7a691"/>
+    <rect x="1080" y="380" width="72" height="69" rx="10" fill="#f5c2ad"/>
+    <circle cx="1024" cy="351" r="15" fill="#fff" opacity=".8"/>
+    <text x="869" y="536" fill="#85837b" font-family="Inter,Arial,sans-serif" font-size="10" font-weight="750" letter-spacing="1">EXPERIMENT · GENERIC</text>
+    <text x="869" y="568" fill="#292924" font-family="Inter,Arial,sans-serif" font-size="19" font-weight="700">Creative Tool</text>
+    <text x="869" y="596" fill="#73726a" font-family="Inter,Arial,sans-serif" font-size="12">A tool shared with the community.</text>
+  </g>
+</svg>

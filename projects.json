@@ -25,5 +25,14 @@
     "tools": ["VS Code", "GitHub Copilot"],
     "slug": "responsible-ai-safety",
     "createdAt": "2026-11-10"
+  },
+  {
+    "title": "AI Design Gallery",
+    "author": "Soo",
+    "githubUsername": "sooyeonni",
+    "category": "Slides",
+    "tools": ["GitHub Copilot"],
+    "slug": "ai-design-gallery",
+    "createdAt": "2026-11-19"
   }
 ]

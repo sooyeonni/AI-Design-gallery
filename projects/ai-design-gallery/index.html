@@ -1,0 +1,1123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#242421">
+  <title>From Project to Gallery · AI Design Study</title>
+  <link rel="icon" href="data:,">
+  <style>
+    @font-face {
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("assets/fonts/inter-latin.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "DM Sans";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("assets/fonts/dm-sans-latin.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Jacquarda Bastarda 9";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("assets/fonts/jacquarda-bastarda-9-latin.woff2") format("woff2");
+    }
+
+    :root {
+      color-scheme: light;
+      --bg: #f7f6f1;
+      --panel: #ffffff;
+      --panel-2: #efeee8;
+      --text: #292924;
+      --muted: #706f69;
+      --line: #dfded7;
+      --cover-bg: #242421;
+      --lime: #c8f176;
+      --lavender: #eee9ff;
+      --blue: #e6f3fc;
+      --peach: #fbe9df;
+      --yellow: #f5efd0;
+      --radius: 22px;
+      font-family: Inter, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { width: 100%; height: 100%; margin: 0; }
+
+    body {
+      overflow: hidden;
+      color: var(--text);
+      background: var(--bg);
+      letter-spacing: -0.02em;
+    }
+
+    button, a { font: inherit; }
+    a { color: inherit; }
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--lime);
+      outline-offset: 4px;
+    }
+
+    .deck {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      isolation: isolate;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: clamp(24px, 4vh, 52px);
+      padding: clamp(26px, 5vw, 82px) clamp(28px, 7vw, 126px) 112px;
+      overflow: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(24px);
+      transition: opacity 380ms ease, transform 380ms ease, visibility 380ms;
+      background: var(--bg);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+      z-index: 1;
+    }
+
+    .slide.cover {
+      display: block;
+      padding: 0;
+      overflow: hidden;
+      background: var(--cover-bg);
+    }
+
+    .cover-canvas {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(100vw, 177.7778vh);
+      height: min(100vh, 56.25vw);
+      overflow: hidden;
+      background: #242421;
+      container-type: inline-size;
+      transform: translate(-50%, -50%);
+    }
+
+    .cover-copy {
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+    }
+
+    .cover-kicker {
+      position: absolute;
+      top: 10.3704%;
+      left: 6.6667%;
+      margin: 0;
+      color: #c8f176;
+      font: 700 1.0417cqw/1.2 Inter, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 1000px;
+      margin-bottom: 20px;
+      font-size: clamp(42px, 4.2vw, 70px);
+      line-height: 1.08;
+      letter-spacing: -.055em;
+    }
+
+    .cover-title {
+      position: absolute;
+      top: 38.65%;
+      left: 6.6667%;
+      width: 24.4792%;
+      max-width: none;
+      margin: 0;
+      color: #f7f5ed;
+      font-size: 4.2708cqw;
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    .cover-title-line { display: block; white-space: nowrap; }
+    .cover-title-from, .cover-title-to { font: 400 3.6458cqw/1.3 "DM Sans", sans-serif; }
+    .cover-title-project { color: #dfded7; font: 400 4.2708cqw/1.3 "Jacquarda Bastarda 9", serif; }
+    .cover-title-gallery { color: #c8f176; font: 400 4.1667cqw/1.3 "Jacquarda Bastarda 9", serif; }
+
+    .lede {
+      max-width: 1040px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(17px, 1.65vw, 25px);
+      line-height: 1.55;
+    }
+
+    .cover-subtitle {
+      position: absolute;
+      top: 71.9444%;
+      left: 6.6667%;
+      margin: 0;
+      color: #c7f273;
+      font: 700 .9375cqw/1.2 Inter, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .cover-author {
+      position: absolute;
+      top: 94.2593%;
+      left: 6.25%;
+      z-index: 3;
+      margin: 0;
+      color: #706f69;
+      font: 500 .8333cqw/1.2 Inter, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+
+    .section-label {
+      margin: 0 0 15px;
+      color: var(--lime);
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .slide-head { align-self: start; width: 100%; max-width: 1340px; }
+    .slide-body { min-height: 0; align-self: start; }
+
+    .cover-stack {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .cover-shot {
+      position: absolute;
+      margin: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .cover-shot img { display: block; width: 100%; height: auto; }
+    .cover-shot.gallery { top: 11.4815%; left: 36.1458%; width: 60.1042%; }
+    .cover-shot.repository { top: 43.2407%; left: 53.0208%; width: 46.9792%; }
+
+    .cover-page {
+      position: absolute;
+      top: 94.0741%;
+      left: 85.4167%;
+      margin: 0;
+      color: #a9a89f;
+      font: 500 .8333cqw/1.2 Inter, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+
+    .grid-2, .grid-3, .grid-4 {
+      display: grid;
+      gap: clamp(14px, 2vw, 26px);
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      min-width: 0;
+      padding: clamp(20px, 2.3vw, 34px);
+      border: 0;
+      border-radius: var(--radius);
+      background: var(--panel);
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: clamp(20px, 2vw, 30px);
+      line-height: 1.2;
+      letter-spacing: -.04em;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      font-size: clamp(15px, 1.3vw, 19px);
+      line-height: 1.55;
+    }
+
+    .card p:last-child { margin-bottom: 0; }
+
+    .tag {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 16px;
+      padding: 0;
+      border-radius: 0;
+      color: var(--muted);
+      background: transparent;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .accent-card { color: #242521; background: var(--lime); }
+    .accent-card p, .accent-card .tag { color: #454b35; }
+    .tint-lilac { color: var(--text); background: var(--lavender); }
+    .tint-blue { color: var(--text); background: var(--blue); }
+    .tint-peach { color: var(--text); background: var(--peach); }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .architecture .card { min-height: 235px; }
+    .architecture .card:last-child { grid-column: 1 / -1; min-height: 0; background: var(--yellow); }
+    .tool-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 16px; }
+    .tool-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 46px;
+      padding: 8px 12px;
+      border: 1px solid rgba(41,41,36,.12);
+      border-radius: 12px;
+      color: var(--text);
+      background: rgba(255,255,255,.72);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .tool-chip img { width: 26px; height: 26px; flex: 0 0 26px; object-fit: contain; }
+    .architecture .arrow {
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 38px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 22px;
+      position: relative;
+      align-items: stretch;
+    }
+
+    .flow::before {
+      display: none;
+    }
+
+    .flow-step { position: relative; padding: 24px; border-radius: var(--radius); background: #e8f1d5; }
+    .flow-step:nth-child(2) { background: var(--blue); }
+    .flow-step:nth-child(3) { background: var(--lavender); }
+    .flow-step:nth-child(4) { background: var(--peach); }
+
+    .flow-dot {
+      display: grid;
+      place-items: start;
+      width: auto;
+      height: auto;
+      margin: 0 0 30px;
+      border: 0;
+      border-radius: 0;
+      color: var(--muted);
+      background: transparent;
+      font-size: 16px;
+      font-weight: 750;
+      box-shadow: none;
+    }
+
+    .flow-step h3 { margin-bottom: 9px; font-size: clamp(20px, 1.8vw, 27px); }
+    .flow-step p { max-width: 260px; color: var(--muted); font-size: clamp(14px, 1.2vw, 18px); line-height: 1.5; }
+
+    .git-graphic {
+      position: relative;
+      min-height: 430px;
+      padding: 36px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .git-graphic svg { width: 100%; height: 100%; min-height: 350px; overflow: visible; }
+    .git-graphic .path { fill: none; stroke: #b5b4ac; stroke-width: 7; stroke-linecap: round; }
+    .git-graphic .branch { fill: none; stroke: #91b849; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#branch-arrow); }
+    .git-graphic .branch-arrow { fill: #91b849; }
+    .git-graphic .node { fill: #ffffff; stroke: var(--text); stroke-width: 5; }
+    .git-graphic .commit { fill: var(--lime); stroke: #ffffff; stroke-width: 3; }
+    .git-graphic text { fill: var(--text); font: 700 20px Inter, sans-serif; }
+    .git-graphic .caption { fill: var(--muted); font-size: 15px; font-weight: 500; }
+    .git-graphic .review-node { fill: #ffffff; stroke: #91b849; stroke-width: 6; }
+    .git-graphic .traveler-halo { fill: rgba(200,241,118,.42); }
+    .git-graphic .traveler-dot { fill: #292924; stroke: #c8f176; stroke-width: 6; }
+    .git-graphic .stage-strip { fill: #f7f6f1; stroke: var(--line); stroke-width: 1; }
+    .git-graphic .stage-number { fill: var(--lime); }
+    .git-graphic .stage-number-text { fill: var(--text); font-size: 14px; font-weight: 700; text-anchor: middle; }
+    .git-graphic .stage-label { fill: var(--text); font-size: 15px; font-weight: 700; }
+    .git-graphic .stage-arrow { fill: var(--muted); font-size: 18px; font-weight: 700; }
+
+    .term-list {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .term {
+      position: relative;
+      grid-column: span 2;
+      min-height: 170px;
+      padding: 24px 24px 24px 48px;
+      border: 0;
+      border-radius: 18px;
+      background: #ffffff;
+    }
+
+    .term:nth-child(n+4) { grid-column: span 3; }
+    .term::before {
+      position: absolute;
+      top: 20px;
+      bottom: 20px;
+      left: 18px;
+      width: 11px;
+      border-radius: 999px;
+      background: #e8f1d5;
+      content: "";
+    }
+
+    .term:nth-child(2)::before { background: var(--lavender); }
+    .term:nth-child(3)::before { background: var(--blue); }
+    .term:nth-child(4)::before { background: var(--peach); }
+    .term:nth-child(5)::before { background: var(--yellow); }
+    .term b { display: block; margin-bottom: 9px; font-size: 20px; }
+    .term small { display: block; margin-bottom: 11px; color: var(--muted); font-size: 13px; font-weight: 750; }
+    .term p { margin: 0; color: var(--text); font-size: 14px; line-height: 1.45; }
+
+    .screenshot-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .screenshot-slide { grid-template-rows: minmax(0, 1fr); }
+    .screenshot-slide .slide-body { align-self: center; width: 100%; }
+
+    .gallery-shot {
+      width: 100%;
+      max-height: 62vh;
+      object-fit: cover;
+      object-position: top center;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 18px 48px rgba(38,38,33,.1);
+    }
+
+    .action-link, .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 48px;
+      padding: 0 17px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--text);
+      background: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .action-link.primary, .button.primary {
+      border-color: var(--lime);
+      color: #22231f;
+      background: var(--lime);
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+
+    .prompt-panel {
+      position: relative;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #10110f;
+    }
+
+    .window-bar { display: flex; gap: 7px; margin-bottom: 20px; }
+    .window-bar i { width: 9px; height: 9px; border-radius: 50%; background: #67685f; }
+    .window-bar i:first-child { background: #f58b80; }
+    .window-bar i:nth-child(2) { background: #f2cd69; }
+    .window-bar i:nth-child(3) { background: #8ed080; }
+
+    pre {
+      margin: 0;
+      color: #e7e7de;
+      font: 15px/1.7 Inter, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .copy-status { min-height: 24px; margin: 12px 0 0; color: var(--lime); font-size: 13px; }
+
+    .pr-window {
+      overflow: hidden;
+      border: 1px solid #3c3d38;
+      border-radius: 17px;
+      color: #e7e9ec;
+      background: #0d1117;
+      box-shadow: 0 24px 70px rgba(0,0,0,.32);
+    }
+
+    .pr-top {
+      padding: 20px 24px;
+      border-bottom: 1px solid #30363d;
+      background: #161b22;
+    }
+
+    .pr-badge {
+      display: inline-flex;
+      margin-bottom: 12px;
+      padding: 5px 9px;
+      border: 1px solid #bb8009;
+      border-radius: 999px;
+      color: #f5d477;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .pr-top h3 { margin: 0 0 13px; font-size: clamp(19px, 2vw, 26px); }
+    .branches { color: #9da7b3; font: 13px/1.5 Inter, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; }
+    .branches b { color: #e7e9ec; }
+    .pr-body { display: grid; grid-template-columns: 1fr 250px; gap: 24px; padding: 24px; }
+    .pr-content { padding: 20px; border: 1px solid #30363d; border-radius: 10px; background: #0d1117; }
+    .pr-content h4 { margin: 0 0 11px; font-size: 15px; }
+    .pr-content p { margin: 0 0 13px; color: #c9d1d9; font-size: 13px; line-height: 1.6; }
+    .pr-checklist { display: grid; gap: 8px; color: #c9d1d9; font-size: 12px; line-height: 1.45; }
+    .pr-checklist span { display: flex; gap: 7px; }
+    .pr-checklist i { color: #8b949e; font-style: normal; }
+    .pr-side { padding: 16px; border: 1px solid #30363d; border-radius: 10px; color: #9da7b3; font-size: 12px; line-height: 1.5; }
+    .pr-side strong { display: block; margin-bottom: 8px; color: #c9d1d9; }
+
+    .code-card {
+      padding: 23px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #11120f;
+    }
+
+    .code-card pre { font-size: 13px; line-height: 1.75; }
+    .diff-plus { color: #8ee6a5; }
+
+    .submission-slide {
+      gap: clamp(14px, 2.5vh, 28px);
+    }
+
+    .submission-slide .slide-head::after {
+      margin-top: 12px;
+    }
+
+    .submission-slide .slide-head h1 {
+      margin-bottom: 8px;
+    }
+
+    .submission-slide .slide-head .lede {
+      font-size: clamp(15px, 1.35vw, 19px);
+    }
+
+    .submission-slide .flow {
+      gap: 14px;
+    }
+
+    .submission-slide .flow-step {
+      min-height: 150px;
+      padding: 18px;
+    }
+
+    .submission-slide .flow-dot {
+      margin-bottom: 14px;
+    }
+
+    .submission-slide .grid-2 {
+      margin-top: 14px !important;
+    }
+
+    .submission-slide .code-card {
+      padding: 16px 18px;
+    }
+
+    .submission-slide .code-card pre {
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .submission-slide .card {
+      padding: 18px;
+    }
+
+    .submission-slide .card h3 {
+      margin-bottom: 7px;
+      font-size: 21px;
+    }
+
+    .submission-slide .card p {
+      margin-bottom: 7px;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+
+    .live-links {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .live-links .actions {
+      margin: 0;
+    }
+
+    .safety-list { display: grid; gap: 14px; }
+    .safety-item { display: grid; grid-template-columns: 42px 1fr; gap: 14px; align-items: start; }
+    .safety-item b { font-size: 18px; }
+    .safety-item p { margin: 5px 0 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
+    .check-icon { color: var(--lime); font-size: 24px; font-weight: 900; }
+
+    .bottom-bar {
+      position: fixed;
+      z-index: 5;
+      right: clamp(18px, 4vw, 64px);
+      bottom: 22px;
+      left: clamp(18px, 4vw, 64px);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      pointer-events: none;
+    }
+
+    body:has(.slide.cover.active) .bottom-bar { display: none; }
+
+    .progress-track {
+      flex: 1;
+      height: 4px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #d7d6cf;
+      pointer-events: auto;
+    }
+
+    .progress-value {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--lime);
+      transition: width 240ms ease;
+    }
+
+    .deck-label { color: var(--muted); font-size: 10px; letter-spacing: .08em; white-space: nowrap; }
+    .slide-count { min-width: 70px; color: var(--muted); font-size: 12px; text-align: center; }
+    .nav-buttons { display: flex; gap: 7px; pointer-events: auto; }
+
+    .nav-buttons button {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--text);
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .slide-head > .section-label { display: none; }
+    .slide-head::after {
+      display: block;
+      height: 1px;
+      margin-top: 20px;
+      background: var(--line);
+      content: "";
+    }
+
+    @media (max-width: 900px) {
+      .slide { padding: 28px 30px 96px; }
+      .grid-4 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .term-list { grid-template-columns: repeat(6, minmax(0,1fr)); }
+      .pr-body { grid-template-columns: 1fr; }
+      .pr-side { display: none; }
+      .screenshot-layout { grid-template-columns: 1fr; }
+      .gallery-shot { max-height: 45vh; }
+      .flow { gap: 10px; }
+      .flow::before { left: 9%; right: 9%; }
+    }
+
+    @media (max-width: 620px) {
+      .slide { gap: 16px; padding: 24px 20px 96px; }
+      .slide-head { margin-top: 10px; }
+      h1 { font-size: clamp(34px, 9vw, 52px); }
+      .grid-2, .grid-3, .grid-4, .architecture { grid-template-columns: 1fr; }
+      .card { padding: 18px; }
+      .card h3 { font-size: 21px; }
+      .card p { font-size: 14px; }
+      .flow { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .flow::before { display: none; }
+      .flow-dot { margin: 0 0 12px; }
+      .flow-step p { font-size: 13px; }
+      .git-graphic { min-height: 310px; padding: 12px; }
+      .git-graphic svg { min-height: 275px; }
+      .term-list { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .term { min-height: 150px; padding: 15px 12px 15px 38px; }
+      .term b { font-size: 17px; }
+      .term p { font-size: 12px; }
+      .pr-content { padding: 14px; }
+      .pr-content p, .pr-checklist { font-size: 11px; }
+      .deck-label { display: none; }
+      .nav-buttons button { width: 36px; height: 36px; }
+      .slide-count { min-width: 55px; }
+      .cover-canvas { width: 100%; height: 100%; }
+      .cover-stack { opacity: .24; }
+      .cover-shot.gallery { top: 16%; left: 30%; width: 70%; }
+      .cover-shot.repository { top: 52%; left: 51%; width: 49%; }
+      .cover-kicker { top: 11%; font-size: clamp(12px, 3.8vw, 16px); }
+      .cover-title { top: 30%; width: 86%; }
+      .cover-title-line { line-height: 1.15; }
+      .cover-title-from, .cover-title-to { font-size: clamp(38px, 11vw, 50px); line-height: 1.15; }
+      .cover-title-project { font-size: clamp(48px, 13vw, 60px); line-height: 1.15; }
+      .cover-title-gallery { font-size: clamp(46px, 12.5vw, 58px); line-height: 1.15; }
+      .cover-subtitle { top: 70%; width: 78%; font-size: clamp(10px, 2.7vw, 12px); white-space: normal; }
+      .cover-author { top: auto; bottom: 4%; font-size: 11px; }
+      .cover-page { top: auto; right: 5%; bottom: 4%; left: auto; font-size: 11px; }
+      .term-list { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .term:nth-child(n) { grid-column: span 1; }
+      .architecture .arrow { height: 24px; transform: rotate(90deg); }
+    }
+
+    @media (max-height: 800px) and (min-width: 621px) {
+      .slide { gap: clamp(14px, 2vh, 22px); padding-top: clamp(24px, 4vh, 36px); padding-bottom: 96px; }
+      h1 { font-size: clamp(40px, 4vw, 58px); margin-bottom: 12px; }
+      .lede { font-size: clamp(16px, 1.4vw, 20px); }
+      .slide-head::after { margin-top: 14px; }
+      .git-graphic { min-height: 330px; padding: 18px; }
+      .git-graphic svg { min-height: 280px; }
+      .architecture .card { min-height: 180px; }
+      .flow-step { padding: 18px; }
+      .flow-dot { margin-bottom: 16px; }
+      .pr-top { padding: 16px 20px; }
+      .pr-body { gap: 16px; padding: 16px; }
+      .pr-content { padding: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+      .git-graphic .traveler { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck" aria-label="AI Design Study workshop">
+    <section class="slide cover active" data-title="From Project to Gallery" aria-hidden="false">
+      <div class="cover-canvas">
+        <div class="cover-stack" aria-hidden="true">
+          <p class="cover-page">01  /  12</p>
+          <figure class="cover-shot gallery"><img src="assets/gallery-overview.svg" alt=""></figure>
+          <figure class="cover-shot repository"><img src="assets/repository-pr-diagram.svg" alt=""></figure>
+        </div>
+        <div class="cover-copy">
+          <p class="cover-kicker">AI DESIGN STUDY  /  NOV 2026</p>
+          <h1 class="cover-title" aria-label="From Project to Gallery">
+            <span class="cover-title-line cover-title-from">From</span>
+            <span class="cover-title-line cover-title-project">Project</span>
+            <span class="cover-title-line"><span class="cover-title-to">to</span> <span class="cover-title-gallery">Gallery</span></span>
+          </h1>
+          <p class="cover-subtitle">HOW I BUILD + HOW TO USE THE GALLERY</p>
+          <p class="cover-author">@SOO</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="A Gallery Is for Showing, Not Building" aria-hidden="true">
+      <header class="slide-head">
+        <p class="section-label">01 · The idea</p>
+        <h1>A Gallery Is for Showing,<br>Not Building</h1>
+        <p class="lede">각자 만든 AI 프로젝트를 한 곳에 모아, 스터디 밖에서도 열어볼 수 있게.</p>
+      </header>
+      <div class="slide-body grid-3">
+        <article class="card accent-card"><span class="tag">01 · Make</span><h3>각자 만든다</h3><p>익숙한 AI 도구로 프로젝트를 만들고, 원본 작업은 각자 환경에 그대로 둡니다.</p></article>
+        <article class="card tint-blue"><span class="tag">02 · Prepare</span><h3>정적 파일로 준비</h3><p>완성된 프로젝트를 웹에서 바로 열 수 있는 파일로 내보내고, 내 경로에서 확인합니다.</p></article>
+        <article class="card tint-lilac"><span class="tag">03 · Share</span><h3>PR로 공유</h3><p>변경 내용을 검토한 뒤 갤러리에 연결합니다. 병합된 결과는 GitHub Pages에 공개됩니다.</p></article>
+      </div>
+    </section>
+
+    <section class="slide" data-title="The Stack and the First Upload Plan" aria-hidden="true">
+      <header class="slide-head">
+        <p class="section-label">02 · How it started</p>
+        <h1>The Stack and the<br>First Upload Plan</h1>
+        <p class="lede">프런트엔드 갤러리와 자동 업로드 서버를 한 번에 연결하려고 했습니다.</p>
+      </header>
+      <div class="slide-body architecture">
+        <article class="card">
+          <span class="tag">Gallery front end</span>
+          <h3>Frontend stack</h3>
+          <div class="tool-list" aria-label="Frontend tools">
+            <span class="tool-chip"><img src="assets/nextjs.svg" alt=""><span>Next.js</span></span>
+            <span class="tool-chip"><img src="assets/react.svg" alt=""><span>React</span></span>
+            <span class="tool-chip"><img src="assets/typescript.svg" alt=""><span>TypeScript</span></span>
+          </div>
+          <p>작품 카드, 카테고리, 검색과 제출 안내를 제공하는 갤러리 웹사이트.</p>
+        </article>
+        <div class="arrow" aria-hidden="true">→</div>
+        <article class="card tint-peach">
+          <span class="tag">First upload idea</span>
+          <h3>ZIP → Upload API → Database</h3>
+          <div class="tool-list" aria-label="Upload services">
+            <span class="tool-chip"><img src="assets/vercel.svg" alt=""><span>Vercel Blob</span></span>
+            <span class="tool-chip"><img src="assets/supabase.svg" alt=""><span>Supabase</span></span>
+          </div>
+          <p>ZIP을 서버에서 받아 파일 저장소와 메타데이터 DB에 연결해 자동 등록하려는 시도.</p>
+        </article>
+        <article class="card">
+          <span class="tag">What got hard</span>
+          <h3>서버 연결 이슈</h3>
+          <p>업로드 API, 파일 저장, DB 연결을 함께 안정화하는 일이 갤러리의 핵심보다 커졌습니다.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Why We Switched to Pull Requests" aria-hidden="true">
+      <header class="slide-head">
+        <p class="section-label">03 · The decision</p>
+        <h1>Why We Switched<br>to Pull Requests</h1>
+        <p class="lede">서버 업로드를 더 복잡하게 만들기보다, 이미 쓰는 GitHub 흐름에 제출을 얹었습니다.</p>
+      </header>
+      <div class="slide-body grid-2">
+        <article class="card tint-peach">
+          <span class="tag">Server upload</span>
+          <h3>갤러리가 직접 받기</h3>
+          <p>별도 업로드 API와 파일 저장소, DB 연결을 계속 운영해야 합니다.</p>
+          <p>연결 이슈가 생기면 참가자의 제출도 막힙니다.</p>
+        </article>
+        <article class="card accent-card">
+          <span class="tag">GitHub PR · GitHub Pages</span>
+          <h3>변경을 보고, 검토하고, 게시</h3>
+          <p>PR에 파일 차이가 남고 리뷰와 자동 검사가 한곳에 모입니다.</p>
+          <p>승인 후 병합하면 GitHub Pages가 정적 사이트를 공개합니다.</p>
+        </article>
+        <div class="card"><span class="tag">Why this fits</span><p>새 업로드 계정이나 별도 참가자 서버 없이, 공개 가능한 파일만 제출하고 사람이 검토할 수 있습니다.</p></div>
+        <div class="card"><span class="tag">The trade-off</span><p>참가자가 정적 내보내기를 직접 해야 합니다. 서버·DB·비밀키가 꼭 필요한 앱은 그대로 올릴 수 없습니다.</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Five GitHub Words to Know" aria-hidden="true">
+      <header class="slide-head">
+        <p class="section-label">04 · The vocabulary</p>
+        <h1>Five GitHub Words<br>to Know</h1>
+        <p class="lede">처음에는 이 다섯 단어만 알아도 제출 흐름을 따라갈 수 있어요.</p>
+      </header>
+      <div class="slide-body term-list">
+        <article class="term"><b>Repository</b><small>저장소</small><p>파일과 변경 이력을 함께 보관하는 프로젝트 공간.</p></article>
+        <article class="term"><b>Fork</b><small>내 계정의 복사본</small><p>원본 저장소를 내 계정에 복사. 권한이 없을 때 사용.</p></article>
+        <article class="term"><b>Branch</b><small>작업 가지</small><p>main을 건드리지 않고 독립적으로 작업하는 경로.</p></article>
+        <article class="term"><b>Commit</b><small>변경 기록</small><p>수정한 내용을 의미 있는 단위로 저장한 시점.</p></article>
+        <article class="term"><b>Pull Request</b><small>병합 요청</small><p>내 변경을 원본 main에 합쳐달라고 제안하고 검토받기.</p></article>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Branches, Commits, and the Pull Request" aria-hidden="true">
+      <header class="slide-head">
+        <p class="section-label">05 · GitHub, visually</p>
+        <h1>Branches, Commits,<br>and the Pull Request</h1>
+        <p class="lede">초록 점은 내 변경 내용입니다. branch에서 commit하고, PR 검토가 끝나면 main에 합쳐집니다.</p>
+      </header>
+      <div class="slide-body git-graphic">
+        <svg viewBox="0 0 1000 380" role="img" aria-labelledby="git-title git-desc">
+          <title id="git-title">How a project branch becomes a pull request and merge</title>
+          <desc id="git-desc">The moving dot follows the green branch from main, past commits, through pull request review, and back into main after approval.</desc>
+          <defs>
+            <marker id="branch-arrow" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+              <path class="branch-arrow" d="M0 1 L14 7 L0 13 Z"></path>
+            </marker>
+          </defs>
+          <path class="path" d="M100 100 H900"></path>
+          <path id="submission-route" class="branch" d="M100 100 C265 100 265 230 430 230 H730 C810 230 810 100 887 100"></path>
+          <circle class="node" cx="100" cy="100" r="13"></circle>
+          <circle class="node" cx="900" cy="100" r="13"></circle>
+          <circle class="commit" cx="500" cy="230" r="12"></circle>
+          <circle class="commit" cx="590" cy="230" r="12"></circle>
+          <circle class="commit" cx="680" cy="230" r="12"></circle>
+          <circle class="review-node" cx="730" cy="230" r="15"></circle>
+          <text x="100" y="54">main</text>
+          <text x="100" y="76" class="caption">shared version</text>
+          <text x="120" y="170">your branch</text>
+          <text x="120" y="191" class="caption">submission/my-project</text>
+          <text x="490" y="278" class="caption">commits</text>
+          <text x="698" y="278" class="caption">open a PR</text>
+          <text x="790" y="54">review + merge</text>
+          <text x="790" y="76" class="caption">approved changes join main</text>
+          <rect class="stage-strip" x="100" y="315" width="800" height="52" rx="14"></rect>
+          <circle class="stage-number" cx="130" cy="341" r="13"></circle>
+          <text class="stage-number-text" x="130" y="346">1</text>
+          <text class="stage-label" x="152" y="347">Branch</text>
+          <text class="stage-arrow" x="292" y="348">→</text>
+          <circle class="stage-number" cx="330" cy="341" r="13"></circle>
+          <text class="stage-number-text" x="330" y="346">2</text>
+          <text class="stage-label" x="352" y="347">Commit</text>
+          <text class="stage-arrow" x="492" y="348">→</text>
+          <circle class="stage-number" cx="530" cy="341" r="13"></circle>
+          <text class="stage-number-text" x="530" y="346">3</text>
+          <text class="stage-label" x="552" y="347">Pull request</text>
+          <text class="stage-arrow" x="702" y="348">→</text>
+          <circle class="stage-number" cx="740" cy="341" r="13"></circle>
+          <text class="stage-number-text" x="740" y="346">4</text>
+          <text class="stage-label" x="762" y="347">Review + merge</text>
+          <g class="traveler" aria-hidden="true">
+            <circle class="traveler-halo" r="15"></circle>
+            <circle class="traveler-dot" r="8"></circle>
+            <animateMotion dur="8s" repeatCount="indefinite" calcMode="linear">
+              <mpath href="#submission-route"></mpath>
+            </animateMotion>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="slide submission-slide" data-title="From Your Project to the Gallery" aria-hidden="true">
+      <header class="slide-head">
+        <p class="section-label">06 · One submission</p>
+        <h1>From Your Project<br>to the Gallery</h1>
+        <p class="lede">새 프로젝트마다 새 branch와 PR 하나. 병합 전에는 갤러리에 공개되지 않습니다.</p>
+      </header>
+      <div class="slide-body">
+        <div class="flow">
+          <article class="flow-step"><div class="flow-dot">01</div><h3>Static export</h3><p>index.html과 필요한 파일을 로컬에서 준비하고 테스트.</p></article>
+          <article class="flow-step"><div class="flow-dot">02</div><h3>Project folder</h3><p>projects/&lt;slug&gt;/ 아래에 완성본만 배치.</p></article>
+          <article class="flow-step"><div class="flow-dot">03</div><h3>Metadata</h3><p>projects.json에 프로젝트 정보를 한 항목 추가.</p></article>
+          <article class="flow-step"><div class="flow-dot">04</div><h3>PR → publish</h3><p>체크와 리뷰 후 merge. GitHub Pages가 게시.</p></article>
+        </div>
+        <div class="grid-2" style="margin-top:24px">
+          <div class="code-card">
+            <span class="tag" style="display:block;margin-bottom:14px">Useful commands you can use</span>
+            <pre>git switch -c submission/my-project
+git add projects/my-project projects.json
+git commit -m "Add my project"
+git push -u origin submission/my-project</pre></div>
+          <div class="card"><span class="tag">projects.json</span><h3>Add one entry to upload</h3><p>Add this project information to <code>projects.json</code> when preparing the submission.</p><p><strong>title · author · githubUsername · category · tools · slug · createdAt</strong></p><p>Use your exact GitHub username so the gallery Contributor link works correctly.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide screenshot-slide" data-title="See the Live Gallery" aria-hidden="true">
+      <div class="slide-body screenshot-layout">
+        <img class="gallery-shot" src="assets/gallery-layout.svg" alt="Illustrative AI Design Study gallery layout with generic project cards">
+        <aside>
+          <div class="live-links">
+            <div class="actions">
+              <a class="action-link primary" href="https://sooyeonni.github.io/AI-Design-gallery/" target="_blank" rel="noopener noreferrer">Open gallery ↗</a>
+              <a class="action-link" href="https://sooyeonni.github.io/AI-Design-gallery/how-to-upload/" target="_blank" rel="noopener noreferrer">Upload guide ↗</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Ask Your Agent to Prepare a Submission" aria-hidden="true">
+      <header class="slide-head">
+        <p class="section-label">08 · Agent prompt</p>
+        <h1>Ask Your Agent to<br>Prepare a Submission</h1>
+        <p class="lede">프로젝트를 열어둔 코딩 에이전트에게 이렇게 요청하고, 준비된 변경을 직접 확인합니다.</p>
+      </header>
+      <div class="slide-body grid-2">
+        <div class="prompt-panel">
+          <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+          <pre id="agent-prompt">Help me submit the project open in my workspace to AI Design Study.
+Read AGENTS.md first. Keep my project intact.
+Prepare and test a static export, then add only:
+- the export under projects/&lt;slug&gt;/
+- one projects.json entry with my exact GitHub username
+Use a new branch, never push to main, and ask before pushing or opening a PR.</pre>
+          <div class="actions"><button class="button primary" id="copy-prompt" type="button">Copy prompt</button><a class="action-link" href="https://github.com/sooyeonni/AI-Design-gallery/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">Read AGENTS.md ↗</a></div>
+          <p class="copy-status" id="copy-status" aria-live="polite"></p>
+        </div>
+        <div class="card">
+          <span class="tag">Agent prepares · person decides</span>
+          <div class="safety-list">
+            <div class="safety-item"><span class="check-icon">01</span><div><b>Read the project docs</b><p>Use the actual build/export steps.</p></div></div>
+            <div class="safety-item"><span class="check-icon">02</span><div><b>Ask for missing details</b><p>Title, author, GitHub username, category, tools.</p></div></div>
+            <div class="safety-item"><span class="check-icon">03</span><div><b>Show the proposed diff</b><p>Review files before any push or PR action.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="What Goes Into the Pull Request" aria-hidden="true">
+      <header class="slide-head">
+        <p class="section-label">09 · PR mockup · example only</p>
+        <h1>What Goes Into<br>the Pull Request</h1>
+        <p class="lede">실제 PR 템플릿 형식의 목업입니다. base는 원본 main, compare는 제출 branch로 둡니다.</p>
+      </header>
+      <div class="slide-body">
+        <div class="pr-window">
+          <div class="pr-top">
+            <span class="pr-badge">EXAMPLE · MOCK PR</span>
+            <h3>Add “My AI Prototype” to the gallery</h3>
+            <div class="branches"><b>base:</b> main &nbsp; ← &nbsp; <b>compare:</b> submission/my-ai-prototype</div>
+          </div>
+          <div class="pr-body">
+            <div class="pr-content">
+              <h4>Project</h4>
+              <p>Title: My AI Prototype<br>Author: Your Name<br>Category: Prototype<br>AI tools: GitHub Copilot, Figma Make<br>Project folder: projects/my-ai-prototype</p>
+              <h4>Submission checklist</h4>
+              <div class="pr-checklist">
+                <span><i>□</i> I own or have permission to publish every included file; I understand the PR is public.</span>
+                <span><i>□</i> Only my static export folder and its metadata entry are changed.</span>
+                <span><i>□</i> The folder contains index.html and local assets, using relative paths.</span>
+                <span><i>□</i> No secrets, private files, dependencies or build configuration.</span>
+                <span><i>□</i> I tested the export under the project subfolder.</span>
+              </div>
+            </div>
+            <aside class="pr-side"><strong>Files changed</strong><code>projects.json</code><br><code>projects/my-ai-prototype/</code><br><br><strong>Contributor link</strong>Exact GitHub username is stored in the metadata entry.</aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Checks, Human Review, Then Publish" aria-hidden="true">
+      <header class="slide-head">
+        <p class="section-label">10 · Review and publish</p>
+        <h1>Checks, Human Review,<br>Then Publish</h1>
+        <p class="lede">자동 검사는 품질 신호이지 승인 버튼이 아닙니다.</p>
+      </header>
+      <div class="slide-body grid-3">
+        <article class="card"><span class="tag">01 · Pull request</span><h3>자동 검사</h3><p>제출 파일 규칙과 메타데이터, 갤러리의 테스트와 정적 빌드를 확인합니다.</p></article>
+        <article class="card tint-blue"><span class="tag">02 · Review</span><h3>사람이 확인</h3><p>기능, 파일 권리, 외부 요청과 공개 적합성을 살피고 필요하면 수정을 요청합니다.</p></article>
+        <article class="card accent-card"><span class="tag">03 · Merge</span><h3>Pages에 게시</h3><p>승인된 변경을 main에 병합하면 공개 워크플로가 썸네일을 만들고 게시합니다.</p></article>
+        <div class="card" style="grid-column:1/-1">
+          <div class="safety-list grid-3">
+            <div class="safety-item"><span class="check-icon">✓</span><div><b>공개 저장소</b><p>비밀키, 회사 자료, 권한 없는 asset은 올리지 않기.</p></div></div>
+            <div class="safety-item"><span class="check-icon">✓</span><div><b>정적 호스팅</b><p>서버·DB·비밀 API가 필요한 앱은 그대로 동작하지 않음.</p></div></div>
+            <div class="safety-item"><span class="check-icon">✓</span><div><b>사람의 승인</b><p>체크 통과만으로 자동 병합하거나 승인하지 않기.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Takeaways" aria-hidden="true">
+      <header class="slide-head">
+        <p class="section-label">11 · Wrap-up</p>
+        <h1>New Project.<br>New Branch. New PR.</h1>
+        <p class="lede">작품을 직접 만들고, 공개 가능한 정적 파일로 준비하고, PR로 함께 검토합니다.</p>
+      </header>
+      <div class="slide-body grid-2">
+        <div class="card accent-card"><span class="tag">Remember</span><h3>Fork는 필요할 때 한 번</h3><p>권한이 있으면 원본에서 branch. 권한이 없으면 fork를 재사용하고 프로젝트마다 새 branch.</p></div>
+        <div class="card"><span class="tag">Before you submit</span><h3>공개 가능한가?</h3><p>파일 권한 · 비밀 정보 · 하위 경로 · 정확한 GitHub username · 프로젝트 용량을 확인합니다.</p></div>
+        <div class="card" style="grid-column:1/-1">
+          <div class="actions">
+            <a class="action-link primary" href="https://sooyeonni.github.io/AI-Design-gallery/" target="_blank" rel="noopener noreferrer">Visit the gallery ↗</a>
+            <a class="action-link" href="https://sooyeonni.github.io/AI-Design-gallery/how-to-upload/" target="_blank" rel="noopener noreferrer">Open the upload guide ↗</a>
+            <a class="action-link" href="https://github.com/sooyeonni/AI-Design-gallery/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">Read AGENTS.md ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-bar" aria-label="Slide controls">
+    <span class="deck-label">AI DESIGN STUDY / GALLERY SESSION</span>
+    <div class="progress-track" aria-label="Presentation progress"><div class="progress-value" id="progress-value"></div></div>
+    <span class="slide-count" id="slide-count" aria-live="polite">01 / 12</span>
+    <div class="nav-buttons">
+      <button id="prev" type="button" aria-label="Previous slide" title="Previous (←)">←</button>
+      <button id="next" type="button" aria-label="Next slide" title="Next (→)">→</button>
+      <button id="fullscreen" type="button" aria-label="Toggle fullscreen" title="Fullscreen (F)">⛶</button>
+    </div>
+  </nav>
+
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll(".slide")];
+      const count = document.getElementById("slide-count");
+      const progress = document.getElementById("progress-value");
+      let current = Math.max(0, Math.min(slides.length - 1, Number(location.hash.replace("#slide-", "")) - 1 || 0));
+
+      function show(index) {
+        current = Math.max(0, Math.min(slides.length - 1, index));
+        slides.forEach((slide, i) => {
+          const active = i === current;
+          slide.classList.toggle("active", active);
+          slide.setAttribute("aria-hidden", String(!active));
+        });
+        count.textContent = `${String(current + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        history.replaceState(null, "", `#slide-${current + 1}`);
+      }
+
+      document.getElementById("prev").addEventListener("click", () => show(current - 1));
+      document.getElementById("next").addEventListener("click", () => show(current + 1));
+      document.getElementById("fullscreen").addEventListener("click", async () => {
+        if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.();
+        else await document.exitFullscreen?.();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.target.closest("input, textarea, select, [contenteditable='true']")) return;
+        if (event.key === " " && event.target.closest("button, a")) return;
+        if (["ArrowRight", "PageDown", " "].includes(event.key)) { event.preventDefault(); show(current + 1); }
+        else if (["ArrowLeft", "PageUp"].includes(event.key)) { event.preventDefault(); show(current - 1); }
+        else if (event.key === "Home") show(0);
+        else if (event.key === "End") show(slides.length - 1);
+        else if (event.key.toLowerCase() === "f") document.getElementById("fullscreen").click();
+      });
+
+      document.getElementById("copy-prompt").addEventListener("click", async () => {
+        const prompt = document.getElementById("agent-prompt").textContent;
+        const status = document.getElementById("copy-status");
+        try {
+          await navigator.clipboard.writeText(prompt);
+          status.textContent = "Prompt copied.";
+        } catch {
+          const range = document.createRange();
+          range.selectNodeContents(document.getElementById("agent-prompt"));
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          status.textContent = "Select the prompt above and copy it.";
+        }
+      });
+
+      show(current);
+    })();
+  </script>
+</body>
+</html>

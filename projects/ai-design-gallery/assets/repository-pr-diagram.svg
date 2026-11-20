@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Pull request submission diagram</title>
+  <desc id="desc">An original diagram showing a project branch proposing files for review before merging to the main branch.</desc>
+  <rect width="1280" height="720" fill="#f1f3f5"/>
+  <rect x="48" y="40" width="1184" height="640" rx="22" fill="#fff" stroke="#d9dee4" stroke-width="2"/>
+  <rect x="48" y="40" width="1184" height="76" rx="22" fill="#f7f8fa"/>
+  <path d="M48 94v22h1184V94" fill="#f7f8fa"/>
+  <circle cx="84" cy="78" r="17" fill="#202c39"/>
+  <path d="M78 78h12m-6-6 6 6-6 6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="116" y="74" fill="#46515d" font-family="Inter,Arial,sans-serif" font-size="15" font-weight="700">AI DESIGN GALLERY</text>
+  <text x="116" y="96" fill="#78818b" font-family="Inter,Arial,sans-serif" font-size="12">PULL REQUEST · ILLUSTRATION</text>
+  <rect x="1002" y="59" width="192" height="38" rx="8" fill="#fff" stroke="#d9dee4"/>
+  <text x="1098" y="83" text-anchor="middle" fill="#47515c" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="650">REVIEW WORKFLOW</text>
+  <text x="92" y="174" fill="#202c39" font-family="Inter,Arial,sans-serif" font-size="32" font-weight="750">Add AI Design Gallery</text>
+  <text x="92" y="207" fill="#6c7681" font-family="Inter,Arial,sans-serif" font-size="16">A contributor proposes a static project export for review.</text>
+  <rect x="92" y="237" width="213" height="40" rx="9" fill="#f5f7f9" stroke="#dfe3e8"/>
+  <path d="M112 257h15m-7-7v14" stroke="#566270" stroke-width="2" stroke-linecap="round"/>
+  <text x="141" y="262" fill="#43505d" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="650">submission/ai-design-gallery</text>
+  <path d="M318 257h69" stroke="#a9b2bc" stroke-width="2"/>
+  <path d="m379 250 9 7-9 7" fill="none" stroke="#a9b2bc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="402" y="237" width="82" height="40" rx="9" fill="#f5f7f9" stroke="#dfe3e8"/>
+  <text x="443" y="262" text-anchor="middle" fill="#43505d" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="650">main</text>
+  <rect x="92" y="310" width="1096" height="54" rx="10" fill="#f7f8fa"/>
+  <circle cx="120" cy="337" r="11" fill="#426d9a"/>
+  <path d="M115 337h10m-5-5v10" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="147" y="343" fill="#25313c" font-family="Inter,Arial,sans-serif" font-size="16" font-weight="700">Proposed changes</text>
+  <rect x="1032" y="323" width="126" height="28" rx="14" fill="#e8f4eb"/>
+  <text x="1095" y="342" text-anchor="middle" fill="#287341" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700">2 FILES CHANGED</text>
+  <rect x="92" y="381" width="1096" height="62" rx="9" fill="#fff" stroke="#e2e5e9"/>
+  <rect x="108" y="395" width="31" height="34" rx="5" fill="#e9f1fb"/>
+  <text x="123" y="418" text-anchor="middle" fill="#47709b" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="750">HTML</text>
+  <text x="158" y="407" fill="#36424e" font-family="ui-monospace,Menlo,monospace" font-size="14">projects/ai-design-gallery/index.html</text>
+  <text x="158" y="427" fill="#7a838d" font-family="Inter,Arial,sans-serif" font-size="12">Static slides and locally bundled assets</text>
+  <rect x="92" y="453" width="1096" height="62" rx="9" fill="#fff" stroke="#e2e5e9"/>
+  <rect x="108" y="467" width="31" height="34" rx="5" fill="#f4efe0"/>
+  <text x="123" y="490" text-anchor="middle" fill="#8a7445" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="750">JSON</text>
+  <text x="158" y="479" fill="#36424e" font-family="ui-monospace,Menlo,monospace" font-size="14">projects.json</text>
+  <text x="158" y="499" fill="#7a838d" font-family="Inter,Arial,sans-serif" font-size="12">One contributor and project entry</text>
+  <rect x="92" y="548" width="1096" height="82" rx="12" fill="#f4f8f5" stroke="#dce8df"/>
+  <circle cx="126" cy="589" r="17" fill="#32784a"/>
+  <path d="m118 589 6 6 11-13" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="160" y="583" fill="#294936" font-family="Inter,Arial,sans-serif" font-size="16" font-weight="750">Review first, then merge</text>
+  <text x="160" y="607" fill="#63756a" font-family="Inter,Arial,sans-serif" font-size="13">The gallery maintainer checks the changes before publication.</text>
+</svg>

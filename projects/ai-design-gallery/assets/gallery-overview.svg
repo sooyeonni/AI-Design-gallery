@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrative AI Design Study gallery</title>
+  <desc id="desc">An original diagram of a project gallery with generic cards and abstract artwork.</desc>
+  <rect width="1280" height="720" fill="#eeeee8"/>
+  <rect x="44" y="36" width="1192" height="648" rx="24" fill="#fff" stroke="#deded7" stroke-width="2"/>
+  <path d="M44 118h1192" stroke="#e6e5df" stroke-width="2"/>
+  <circle cx="78" cy="78" r="8" fill="#f3a292"/>
+  <circle cx="106" cy="78" r="8" fill="#f0ce6c"/>
+  <circle cx="134" cy="78" r="8" fill="#9cc98b"/>
+  <text x="180" y="84" fill="#292924" font-family="Inter,Arial,sans-serif" font-size="18" font-weight="750" letter-spacing="2">AI DESIGN STUDY</text>
+  <text x="866" y="82" fill="#5f5e58" font-family="Inter,Arial,sans-serif" font-size="16">Gallery</text>
+  <text x="968" y="82" fill="#5f5e58" font-family="Inter,Arial,sans-serif" font-size="16">How to Upload</text>
+  <rect x="1102" y="57" width="100" height="38" rx="19" fill="#292924"/>
+  <text x="1152" y="81" text-anchor="middle" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700">ABOUT</text>
+  <rect x="82" y="146" width="174" height="28" rx="14" fill="#f3f1e8"/>
+  <text x="169" y="165" text-anchor="middle" fill="#69675e" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="750" letter-spacing="1.4">ILLUSTRATIVE UI</text>
+  <text x="82" y="232" fill="#292924" font-family="Inter,Arial,sans-serif" font-size="46" font-weight="750" letter-spacing="-2">A gallery for AI design</text>
+  <text x="84" y="268" fill="#77766e" font-family="Inter,Arial,sans-serif" font-size="18">Explore experiments, prototypes, and ideas shared by the community.</text>
+  <rect x="84" y="300" width="66" height="34" rx="17" fill="#292924"/>
+  <text x="117" y="322" text-anchor="middle" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="650">All</text>
+  <rect x="160" y="300" width="78" height="34" rx="17" fill="#f4f3ee" stroke="#e4e3dc"/>
+  <text x="199" y="322" text-anchor="middle" fill="#55544e" font-family="Inter,Arial,sans-serif" font-size="13">Slides</text>
+  <rect x="248" y="300" width="100" height="34" rx="17" fill="#f4f3ee" stroke="#e4e3dc"/>
+  <text x="298" y="322" text-anchor="middle" fill="#55544e" font-family="Inter,Arial,sans-serif" font-size="13">Prototype</text>
+  <rect x="358" y="300" width="108" height="34" rx="17" fill="#f4f3ee" stroke="#e4e3dc"/>
+  <text x="412" y="322" text-anchor="middle" fill="#55544e" font-family="Inter,Arial,sans-serif" font-size="13">Experiment</text>
+  <g>
+    <rect x="84" y="360" width="350" height="274" rx="16" fill="#fff" stroke="#e5e4de" stroke-width="2"/>
+    <rect x="102" y="378" width="314" height="146" rx="11" fill="#eee9ff"/>
+    <circle cx="200" cy="445" r="42" fill="#c6b8ff"/>
+    <path d="M146 492c28-41 69-49 111-8 35-35 77-29 122 22H146z" fill="#8b78df"/>
+    <text x="104" y="559" fill="#817f77" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="750" letter-spacing="1.2">SLIDES · GENERIC EXAMPLE</text>
+    <text x="104" y="590" fill="#292924" font-family="Inter,Arial,sans-serif" font-size="21" font-weight="700">Concept Study</text>
+    <circle cx="397" cy="592" r="16" fill="#f0efe9"/>
+    <path d="M393 592h8m-4-4 4 4-4 4" fill="none" stroke="#55544e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g>
+    <rect x="465" y="360" width="350" height="274" rx="16" fill="#fff" stroke="#e5e4de" stroke-width="2"/>
+    <rect x="483" y="378" width="314" height="146" rx="11" fill="#e2f1e8"/>
+    <rect x="524" y="408" width="98" height="86" rx="10" fill="#9cc9ae"/>
+    <rect x="638" y="395" width="121" height="47" rx="9" fill="#fff" opacity=".85"/>
+    <rect x="638" y="451" width="121" height="43" rx="9" fill="#c2e0cc"/>
+    <path d="M537 477l24-27 21 18 24-31" fill="none" stroke="#477c5d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="485" y="559" fill="#817f77" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="750" letter-spacing="1.2">PROTOTYPE · GENERIC EXAMPLE</text>
+    <text x="485" y="590" fill="#292924" font-family="Inter,Arial,sans-serif" font-size="21" font-weight="700">Interactive Sketch</text>
+    <circle cx="778" cy="592" r="16" fill="#f0efe9"/>
+    <path d="M774 592h8m-4-4 4 4-4 4" fill="none" stroke="#55544e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g>
+    <rect x="846" y="360" width="350" height="274" rx="16" fill="#fff" stroke="#e5e4de" stroke-width="2"/>
+    <rect x="864" y="378" width="314" height="146" rx="11" fill="#fae8df"/>
+    <path d="M887 478h268" stroke="#e5c4b8" stroke-width="2"/>
+    <rect x="895" y="417" width="70" height="61" rx="9" fill="#fff5ee"/>
+    <rect x="980" y="398" width="76" height="80" rx="9" fill="#e7a691"/>
+    <rect x="1071" y="427" width="69" height="51" rx="9" fill="#f5c2ad"/>
+    <circle cx="1018" cy="424" r="12" fill="#fff" opacity=".8"/>
+    <text x="866" y="559" fill="#817f77" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="750" letter-spacing="1.2">TOOL · GENERIC EXAMPLE</text>
+    <text x="866" y="590" fill="#292924" font-family="Inter,Arial,sans-serif" font-size="21" font-weight="700">Creative Tool</text>
+    <circle cx="1159" cy="592" r="16" fill="#f0efe9"/>
+    <path d="M1155 592h8m-4-4 4 4-4 4" fill="none" stroke="#55544e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
