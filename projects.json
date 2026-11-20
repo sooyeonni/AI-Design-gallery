@@ -25,5 +25,14 @@
     "tools": ["VS Code", "GitHub Copilot"],
     "slug": "responsible-ai-safety",
     "createdAt": "2026-11-10"
+  },
+  {
+    "title": "blow&pop (sqkim copy)",
+    "author": "sqkim",
+    "githubUsername": "sqkimofficial",
+    "category": "Experiment",
+    "tools": ["Claude Code", "MediaPipe", "Three.js", "React", "TypeScript"],
+    "slug": "blow-pop-sqkim",
+    "createdAt": "2026-11-19"
   }
 ]
