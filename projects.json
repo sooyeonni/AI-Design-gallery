@@ -34,5 +34,14 @@
     "tools": ["GitHub Copilot"],
     "slug": "ai-design-gallery",
     "createdAt": "2026-11-19"
+  },
+  {
+    "title": "Firework Pop",
+    "author": "Tae Lim",
+    "githubUsername": "worktaelim",
+    "category": "Experiment",
+    "tools": ["Claude Code", "MediaPipe", "React", "TypeScript", "Vite"],
+    "slug": "firework-pop",
+    "createdAt": "2026-11-27"
   }
 ]
